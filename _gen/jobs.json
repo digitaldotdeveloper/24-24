@@ -1,0 +1,327 @@
+[
+ {
+  "name": "bg-blackout",
+  "w": 1600,
+  "h": 900,
+  "fit": "bg",
+  "keys": 0,
+  "prompt": "Looking down a narrow Beirut residential street at night during a total power cut.\nConcrete apartment buildings with cluttered balconies crowd both sides, and every\nsingle window is dark. The only light is a weak warm orange glow from two or three\ncandle-lit rooms far down the street, and a faint cold blue moonlight on the asphalt.\nHeavy blue-black shadow, deep contrast, the far end of the street softly out of focus.\n\nWide cinematic 16:9 photograph, film grain, rich colour grading. No text, no logo, no watermark, no people looking at camera."
+ },
+ {
+  "name": "skyline",
+  "w": 1360,
+  "h": 470,
+  "fit": "cover",
+  "keys": 1,
+  "prompt": "A continuous row of Beirut apartment blocks seen from across the city at night during a\nblackout, photographed dead straight on so it reads as a flat wall of buildings of slightly\ndifferent heights. Cluttered rooftops with black plastic water tanks, satellite dishes and\nantenna masts breaking the top edge. Every window is dark and unlit. Rendered almost as a\nnear-black silhouette, with only a thin cold blue rim of moonlight along the upper edges.\n\nExtremely wide short horizontal banner image.\n\nCinematic 3D product render, photoreal materials, dramatic directional rim light, high contrast. The subject is centred and fills about 90% of the frame.\n\nDraw exactly ONE single subject. Do not draw it twice, no duplicate, no turnaround sheet. Reply with the picture only. Do not describe it, do not comment on it, do not explain what you changed or point out anything about the framing.\n\nEverything outside the subject must be completely flat, uniform, solid #00FF00 pure green: one single colour, no gradient, no shadow, no reflection, no floor, no ground, no background scene, no vignette. Nothing in the subject itself may be green or greenish. No text, no writing, no numbers, no letters, no brand name, no logo, no watermark, no signature."
+ },
+ {
+  "name": "tower_l",
+  "w": 250,
+  "h": 560,
+  "fit": "pad",
+  "keys": 1,
+  "prompt": "A single tall narrow Beirut apartment tower, about twelve storeys, seen dead straight on from\nthe front, unlit at night during a power cut. Weathered grey concrete, rows of small balconies\nwith laundry lines and rusting air-conditioner units, a black plastic water tank and a satellite\ndish on the roof. Every window dark, only a cold blue moonlight rim down the left edge.\nThe tower stands upright and fills the full height of the frame.\n\nExtremely tall narrow vertical portrait image.\n\nCinematic 3D product render, photoreal materials, dramatic directional rim light, high contrast. The subject is centred and fills about 90% of the frame.\n\nDraw exactly ONE single subject. Do not draw it twice, no duplicate, no turnaround sheet. Reply with the picture only. Do not describe it, do not comment on it, do not explain what you changed or point out anything about the framing.\n\nEverything outside the subject must be completely flat, uniform, solid #00FF00 pure green: one single colour, no gradient, no shadow, no reflection, no floor, no ground, no background scene, no vignette. Nothing in the subject itself may be green or greenish. No text, no writing, no numbers, no letters, no brand name, no logo, no watermark, no signature."
+ },
+ {
+  "name": "tower_r",
+  "w": 236,
+  "h": 500,
+  "fit": "pad",
+  "keys": 1,
+  "prompt": "A single Beirut apartment tower, about ten storeys, seen dead straight on from the front, unlit\nat night during a power cut. Sand-coloured render stained with damp, a lift shaft box on the\nroof, rows of shuttered balconies, a tangle of cables down one side. Every window dark, only a\ncold blue moonlight rim down the right edge. It stands upright and fills the full height of the frame.\n\nTall vertical portrait image.\n\nCinematic 3D product render, photoreal materials, dramatic directional rim light, high contrast. The subject is centred and fills about 90% of the frame.\n\nDraw exactly ONE single subject. Do not draw it twice, no duplicate, no turnaround sheet. Reply with the picture only. Do not describe it, do not comment on it, do not explain what you changed or point out anything about the framing.\n\nEverything outside the subject must be completely flat, uniform, solid #00FF00 pure green: one single colour, no gradient, no shadow, no reflection, no floor, no ground, no background scene, no vignette. Nothing in the subject itself may be green or greenish. No text, no writing, no numbers, no letters, no brand name, no logo, no watermark, no signature."
+ },
+ {
+  "name": "wires",
+  "w": 1400,
+  "h": 210,
+  "fit": "cover",
+  "keys": 1,
+  "prompt": "A chaotic tangle of Lebanese overhead electricity cables strung between two leaning utility\npoles: dozens of black wires sagging in messy loops, bundles taped together at the middle,\nseveral ends hanging loose, a small transformer can bolted to one pole. Seen dead straight on.\nNear-black cables with a thin cold blue moonlight highlight along their upper edges.\n\nExtremely wide short horizontal banner image.\n\nCinematic 3D product render, photoreal materials, dramatic directional rim light, high contrast. The subject is centred and fills about 90% of the frame.\n\nDraw exactly ONE single subject. Do not draw it twice, no duplicate, no turnaround sheet. Reply with the picture only. Do not describe it, do not comment on it, do not explain what you changed or point out anything about the framing.\n\nEverything outside the subject must be completely flat, uniform, solid #00FF00 pure green: one single colour, no gradient, no shadow, no reflection, no floor, no ground, no background scene, no vignette. Nothing in the subject itself may be green or greenish. No text, no writing, no numbers, no letters, no brand name, no logo, no watermark, no signature."
+ },
+ {
+  "name": "bulb",
+  "w": 84,
+  "h": 146,
+  "fit": "pad",
+  "keys": 1,
+  "prompt": "A single bare incandescent light bulb hanging straight down from a short length of black\ntwisted flex cable, seen from the side, switched OFF and completely dark. Clear glass envelope,\nvisible cold grey tungsten filament inside, brass screw base. Cold blue rim light only.\n\nTall vertical portrait image.\n\nCinematic 3D product render, photoreal materials, dramatic directional rim light, high contrast. The subject is centred and fills about 90% of the frame.\n\nDraw exactly ONE single subject. Do not draw it twice, no duplicate, no turnaround sheet. Reply with the picture only. Do not describe it, do not comment on it, do not explain what you changed or point out anything about the framing.\n\nEverything outside the subject must be completely flat, uniform, solid #00FF00 pure green: one single colour, no gradient, no shadow, no reflection, no floor, no ground, no background scene, no vignette. Nothing in the subject itself may be green or greenish. No text, no writing, no numbers, no letters, no brand name, no logo, no watermark, no signature."
+ },
+ {
+  "name": "meter",
+  "w": 146,
+  "h": 184,
+  "fit": "pad",
+  "keys": 1,
+  "prompt": "An old grimy Lebanese electricity meter, seen dead straight on from the front. A scratched\ngrey-white plastic casing with a small glass window showing black mechanical number dials and a\nred rotating disc, two screw terminals under a cover at the bottom, and a lead seal on a twisted\nwire. Worn, dusty, unlit and dead. Cold dim light.\n\nTall vertical portrait image.\n\nCinematic 3D product render, photoreal materials, dramatic directional rim light, high contrast. The subject is centred and fills about 90% of the frame.\n\nDraw exactly ONE single subject. Do not draw it twice, no duplicate, no turnaround sheet. Reply with the picture only. Do not describe it, do not comment on it, do not explain what you changed or point out anything about the framing.\n\nEverything outside the subject must be completely flat, uniform, solid #00FF00 pure green: one single colour, no gradient, no shadow, no reflection, no floor, no ground, no background scene, no vignette. Nothing in the subject itself may be green or greenish. No text, no writing, no numbers, no letters, no brand name, no logo, no watermark, no signature."
+ },
+ {
+  "name": "moteur",
+  "w": 322,
+  "h": 232,
+  "fit": "pad",
+  "keys": 1,
+  "prompt": "A battered diesel generator of the kind that powers a Lebanese neighbourhood: a rusted\nyellow-and-grey steel canopy on a skid frame, a fat exhaust pipe elbowing up out of the top,\na fuel cap, a control panel of dead unlit gauges, a pull handle, and oil stains and rust streaks\nrunning down the sides. Three-quarter front view. Grimy and industrial.\n\nWide landscape image.\n\nCinematic 3D product render, photoreal materials, dramatic directional rim light, high contrast. The subject is centred and fills about 90% of the frame.\n\nDraw exactly ONE single subject. Do not draw it twice, no duplicate, no turnaround sheet. Reply with the picture only. Do not describe it, do not comment on it, do not explain what you changed or point out anything about the framing.\n\nEverything outside the subject must be completely flat, uniform, solid #00FF00 pure green: one single colour, no gradient, no shadow, no reflection, no floor, no ground, no background scene, no vignette. Nothing in the subject itself may be green or greenish. No text, no writing, no numbers, no letters, no brand name, no logo, no watermark, no signature."
+ },
+ {
+  "name": "candle",
+  "w": 64,
+  "h": 148,
+  "fit": "pad",
+  "keys": 1,
+  "prompt": "A single white household candle burning, seen from the side, standing on nothing. Melted wax\nrunning down one side, a small warm orange teardrop flame at the top with a soft halo close\naround it. The warm orange light falls on the wax; everything else is dark. The glow must fade\nto nothing well inside the frame.\n\nExtremely tall narrow vertical portrait image.\n\nCinematic 3D product render, photoreal materials, dramatic directional rim light, high contrast. The subject is centred and fills about 90% of the frame.\n\nDraw exactly ONE single subject. Do not draw it twice, no duplicate, no turnaround sheet. Reply with the picture only. Do not describe it, do not comment on it, do not explain what you changed or point out anything about the framing.\n\nEverything outside the subject must be completely flat, uniform, solid #00FF00 pure green: one single colour, no gradient, no shadow, no reflection, no floor, no ground, no background scene, no vignette. Nothing in the subject itself may be green or greenish. No text, no writing, no numbers, no letters, no brand name, no logo, no watermark, no signature."
+ },
+ {
+  "name": "bg-panels",
+  "w": 1600,
+  "h": 900,
+  "fit": "bg",
+  "keys": 0,
+  "prompt": "A bright Beirut rooftop at midday looking out over the city towards the Mediterranean. Clear\ndeep blue sky with a few thin white clouds, hazy pale buildings receding into the distance, the\nsea a bright band on the horizon. Strong hard overhead sunlight, crisp shadows, slight heat haze.\n\nWide cinematic 16:9 photograph, film grain, rich colour grading. No text, no logo, no watermark, no people looking at camera."
+ },
+ {
+  "name": "sun",
+  "w": 226,
+  "h": 226,
+  "fit": "pad",
+  "keys": 1,
+  "prompt": "The sun as a brilliant white-hot disc in a clear sky seen through a camera lens: a round core of\npure white light with a warm golden corona bleeding outward and a few soft concentric lens-flare\nrings. The disc is centred, and the glow fades completely to nothing well inside the frame so\nthere is a clean border of plain flat background all the way around it.\n\nSquare image.\n\nCinematic 3D product render, photoreal materials, dramatic directional rim light, high contrast. The subject is centred and fills about 90% of the frame.\n\nDraw exactly ONE single subject. Do not draw it twice, no duplicate, no turnaround sheet. Reply with the picture only. Do not describe it, do not comment on it, do not explain what you changed or point out anything about the framing.\n\nEverything outside the subject must be completely flat, uniform, solid #00FF00 pure green: one single colour, no gradient, no shadow, no reflection, no floor, no ground, no background scene, no vignette. Nothing in the subject itself may be green or greenish. No text, no writing, no numbers, no letters, no brand name, no logo, no watermark, no signature."
+ },
+ {
+  "name": "cloud",
+  "w": 306,
+  "h": 122,
+  "fit": "pad",
+  "keys": 1,
+  "prompt": "A single small white cumulus cloud seen from the side, sunlit from the upper right, with bright\nwhite billowing tops and soft grey-blue undersides. Clean crisp rounded edges, one solid shape,\nnever fine wispy see-through tendrils.\n\nExtremely wide short horizontal banner image.\n\nCinematic 3D product render, photoreal materials, dramatic directional rim light, high contrast. The subject is centred and fills about 90% of the frame.\n\nDraw exactly ONE single subject. Do not draw it twice, no duplicate, no turnaround sheet. Reply with the picture only. Do not describe it, do not comment on it, do not explain what you changed or point out anything about the framing.\n\nEverything outside the subject must be completely flat, uniform, solid #00FF00 pure green: one single colour, no gradient, no shadow, no reflection, no floor, no ground, no background scene, no vignette. Nothing in the subject itself may be green or greenish. No text, no writing, no numbers, no letters, no brand name, no logo, no watermark, no signature."
+ },
+ {
+  "name": "roof",
+  "w": 1360,
+  "h": 240,
+  "fit": "cover",
+  "keys": 1,
+  "prompt": "The flat concrete roof deck of a Beirut apartment building at midday, seen from a low angle dead\nstraight on: a pale sun-bleached concrete slab running the full width, a low parapet wall behind\nit, scattered grit, a rusted rebar stub and a drain. Strong midday sunlight from above with a\ncrisp hard shadow under the parapet.\n\nExtremely wide short horizontal banner image.\n\nCinematic 3D product render, photoreal materials, dramatic directional rim light, high contrast. The subject is centred and fills about 90% of the frame.\n\nDraw exactly ONE single subject. Do not draw it twice, no duplicate, no turnaround sheet. Reply with the picture only. Do not describe it, do not comment on it, do not explain what you changed or point out anything about the framing.\n\nEverything outside the subject must be completely flat, uniform, solid #00FF00 pure green: one single colour, no gradient, no shadow, no reflection, no floor, no ground, no background scene, no vignette. Nothing in the subject itself may be green or greenish. No text, no writing, no numbers, no letters, no brand name, no logo, no watermark, no signature."
+ },
+ {
+  "name": "panel_a",
+  "w": 566,
+  "h": 356,
+  "fit": "pad",
+  "keys": 1,
+  "prompt": "An array of six solar panels bolted together as one block: six monocrystalline photovoltaic\nmodules in two rows of three, deep blue-black cells with fine silver busbar lines in a neat grid,\nslim anodised aluminium frames. Seen from a low three-quarter front angle so the whole array\nreads as one rectangular slab. Bright midday sun, a hard white specular streak sliding across the\nglass, crisp reflections of blue sky in the cells.\n\nWide landscape image.\n\nCinematic 3D product render, photoreal materials, dramatic directional rim light, high contrast. The subject is centred and fills about 90% of the frame.\n\nDraw exactly ONE single subject. Do not draw it twice, no duplicate, no turnaround sheet. Reply with the picture only. Do not describe it, do not comment on it, do not explain what you changed or point out anything about the framing.\n\nEverything outside the subject must be completely flat, uniform, solid #00FF00 pure green: one single colour, no gradient, no shadow, no reflection, no floor, no ground, no background scene, no vignette. Nothing in the subject itself may be green or greenish. No text, no writing, no numbers, no letters, no brand name, no logo, no watermark, no signature."
+ },
+ {
+  "name": "panel_b",
+  "w": 338,
+  "h": 226,
+  "fit": "pad",
+  "keys": 1,
+  "prompt": "An array of four solar panels bolted together as one block: four monocrystalline photovoltaic\nmodules in two rows of two, deep blue-black cells with fine silver busbar lines, slim anodised\naluminium frames. Seen from a low three-quarter front angle from slightly further right so the\narray reads as one rectangular slab. Bright midday sun, hard specular highlight across the glass.\n\nWide landscape image.\n\nCinematic 3D product render, photoreal materials, dramatic directional rim light, high contrast. The subject is centred and fills about 90% of the frame.\n\nDraw exactly ONE single subject. Do not draw it twice, no duplicate, no turnaround sheet. Reply with the picture only. Do not describe it, do not comment on it, do not explain what you changed or point out anything about the framing.\n\nEverything outside the subject must be completely flat, uniform, solid #00FF00 pure green: one single colour, no gradient, no shadow, no reflection, no floor, no ground, no background scene, no vignette. Nothing in the subject itself may be green or greenish. No text, no writing, no numbers, no letters, no brand name, no logo, no watermark, no signature."
+ },
+ {
+  "name": "bracket",
+  "w": 430,
+  "h": 96,
+  "fit": "pad",
+  "keys": 1,
+  "prompt": "A solar mounting rail assembly: one long extruded aluminium rail carried on three short\ntriangular tilt legs bolted down to flat concrete feet, with stainless steel module clamps spaced\nalong the top of the rail. Seen dead straight on from the side. Bright midday sunlight, clean\nindustrial hardware, sharp machined edges.\n\nExtremely wide short horizontal banner image.\n\nCinematic 3D product render, photoreal materials, dramatic directional rim light, high contrast. The subject is centred and fills about 90% of the frame.\n\nDraw exactly ONE single subject. Do not draw it twice, no duplicate, no turnaround sheet. Reply with the picture only. Do not describe it, do not comment on it, do not explain what you changed or point out anything about the framing.\n\nEverything outside the subject must be completely flat, uniform, solid #00FF00 pure green: one single colour, no gradient, no shadow, no reflection, no floor, no ground, no background scene, no vignette. Nothing in the subject itself may be green or greenish. No text, no writing, no numbers, no letters, no brand name, no logo, no watermark, no signature."
+ },
+ {
+  "name": "bird",
+  "w": 90,
+  "h": 54,
+  "fit": "pad",
+  "keys": 1,
+  "prompt": "A single pigeon in flight seen from the side, wings spread wide mid-beat, grey and white\nfeathers catching bright midday sun from above.\n\nWide landscape image.\n\nCinematic 3D product render, photoreal materials, dramatic directional rim light, high contrast. The subject is centred and fills about 90% of the frame.\n\nDraw exactly ONE single subject. Do not draw it twice, no duplicate, no turnaround sheet. Reply with the picture only. Do not describe it, do not comment on it, do not explain what you changed or point out anything about the framing.\n\nEverything outside the subject must be completely flat, uniform, solid #00FF00 pure green: one single colour, no gradient, no shadow, no reflection, no floor, no ground, no background scene, no vignette. Nothing in the subject itself may be green or greenish. No text, no writing, no numbers, no letters, no brand name, no logo, no watermark, no signature."
+ },
+ {
+  "name": "bg-inverter",
+  "w": 1600,
+  "h": 900,
+  "fit": "bg",
+  "keys": 0,
+  "prompt": "The interior of a Lebanese building service room lit by one warm work lamp: bare grey plaster\nwalls, a scuffed concrete floor, a distribution board and a coil of conduit on the far wall,\ndust in the air. Warm amber pool of light falling from the upper left, the corners deep in shadow.\n\nWide cinematic 16:9 photograph, film grain, rich colour grading. No text, no logo, no watermark, no people looking at camera."
+ },
+ {
+  "name": "wall",
+  "w": 940,
+  "h": 716,
+  "fit": "cover",
+  "keys": 0,
+  "prompt": "A plain interior wall of a service room seen dead straight on and perfectly flat: bare grey\nskim-coat plaster with a faint trowel texture, a couple of old screw holes and a light scuff\nnear one edge. Softly lit from the upper left with warm amber light, the corners a little darker.\n\nWide landscape image.\n\nCinematic 3D product render, photoreal materials, dramatic directional rim light, high contrast. The subject is centred and fills about 90% of the frame.\n\nDraw exactly ONE single subject. Do not draw it twice, no duplicate, no turnaround sheet. Reply with the picture only. Do not describe it, do not comment on it, do not explain what you changed or point out anything about the framing.\n\nEverything outside the subject must be completely flat, uniform, solid #00FF00 pure green: one single colour, no gradient, no shadow, no reflection, no floor, no ground, no background scene, no vignette. Nothing in the subject itself may be green or greenish. No text, no writing, no numbers, no letters, no brand name, no logo, no watermark, no signature."
+ },
+ {
+  "name": "cable_in",
+  "w": 268,
+  "h": 150,
+  "fit": "pad",
+  "keys": 1,
+  "prompt": "A thick black armoured electrical cable coming down from the top left and bending away to the\nright, its cut end stripped back to show three insulated conductors coloured brown, blue and\ngrey, each ending in a short length of bare bright copper. Seen dead straight on.\n\nWide landscape image.\n\nCinematic 3D product render, photoreal materials, dramatic directional rim light, high contrast. The subject is centred and fills about 90% of the frame.\n\nDraw exactly ONE single subject. Do not draw it twice, no duplicate, no turnaround sheet. Reply with the picture only. Do not describe it, do not comment on it, do not explain what you changed or point out anything about the framing.\n\nEverything outside the subject must be completely flat, uniform, solid #00FF00 pure green: one single colour, no gradient, no shadow, no reflection, no floor, no ground, no background scene, no vignette. Nothing in the subject itself may be green or greenish. No text, no writing, no numbers, no letters, no brand name, no logo, no watermark, no signature."
+ },
+ {
+  "name": "inv_body",
+  "w": 424,
+  "h": 524,
+  "fit": "pad",
+  "keys": 2,
+  "prompt": "A wall-mounted hybrid solar inverter with its front cover removed, seen perfectly flat and dead\nstraight on from the front. A rectangular dark charcoal cast-aluminium chassis, clearly taller\nthan it is wide, with deep vertical cooling fins down both outer sides, softly rounded corners,\nand a row of cable glands along the bottom edge.\n\nOn its front face there are exactly TWO openings: in the UPPER HALF one wide horizontal\nrectangular display recess, and in the LOWER HALF one large circular fan opening. Both the\nrectangular recess and the circular opening are filled with completely flat, uniform, solid\n#FF00FF magenta: one single colour, no gradient, no reflection, no detail, no grille, nothing\nat all drawn inside them. The two magenta shapes do not touch each other.\n\nSquare image.\n\nCinematic 3D product render, photoreal materials, dramatic directional rim light, high contrast. The subject is centred and fills about 90% of the frame.\n\nDraw exactly ONE single subject. Do not draw it twice, no duplicate, no turnaround sheet. Reply with the picture only. Do not describe it, do not comment on it, do not explain what you changed or point out anything about the framing.\n\nEverything outside the subject must be completely flat, uniform, solid #00FF00 pure green: one single colour, no gradient, no shadow, no reflection, no floor, no ground, no background scene, no vignette. Nothing in the subject itself may be green or greenish. No text, no writing, no numbers, no letters, no brand name, no logo, no watermark, no signature."
+ },
+ {
+  "name": "inv_cover",
+  "w": 424,
+  "h": 524,
+  "fit": "pad",
+  "keys": 1,
+  "prompt": "The loose front cover panel of a wall-mounted hybrid solar inverter, on its own and detached:\na flat dark charcoal anodised aluminium plate, clearly taller than it is wide, with rounded\ncorners, a brushed finish, a rectangular window cut-out in the upper half, a round vented grille\nin the lower half, and four small countersunk screw holes. Seen at a slight three-quarter angle\nso it reads as a separate loose panel with a visible edge thickness.\n\nSquare image.\n\nCinematic 3D product render, photoreal materials, dramatic directional rim light, high contrast. The subject is centred and fills about 90% of the frame.\n\nDraw exactly ONE single subject. Do not draw it twice, no duplicate, no turnaround sheet. Reply with the picture only. Do not describe it, do not comment on it, do not explain what you changed or point out anything about the framing.\n\nEverything outside the subject must be completely flat, uniform, solid #00FF00 pure green: one single colour, no gradient, no shadow, no reflection, no floor, no ground, no background scene, no vignette. Nothing in the subject itself may be green or greenish. No text, no writing, no numbers, no letters, no brand name, no logo, no watermark, no signature."
+ },
+ {
+  "name": "inv_screen",
+  "w": 284,
+  "h": 152,
+  "fit": "pad",
+  "keys": 1,
+  "prompt": "A rectangular backlit LCD panel out of a solar inverter, seen perfectly flat and dead straight on\nand filling the frame. Dark glass with a soft warm amber backlight glowing through it, showing a\nrow of abstract vertical bar-graph blocks and one large seven-segment style block shape. The\nshapes are purely abstract with no readable words, letters or numbers anywhere.\n\nWide landscape image.\n\nCinematic 3D product render, photoreal materials, dramatic directional rim light, high contrast. The subject is centred and fills about 90% of the frame.\n\nDraw exactly ONE single subject. Do not draw it twice, no duplicate, no turnaround sheet. Reply with the picture only. Do not describe it, do not comment on it, do not explain what you changed or point out anything about the framing.\n\nEverything outside the subject must be completely flat, uniform, solid #00FF00 pure green: one single colour, no gradient, no shadow, no reflection, no floor, no ground, no background scene, no vignette. Nothing in the subject itself may be green or greenish. No text, no writing, no numbers, no letters, no brand name, no logo, no watermark, no signature."
+ },
+ {
+  "name": "fan",
+  "w": 168,
+  "h": 168,
+  "fit": "pad",
+  "keys": 1,
+  "prompt": "A circular axial cooling fan seen perfectly flat and dead straight on from the front: seven\ncurved black plastic blades around a round central hub, set inside a black circular housing ring.\nFine dust on the blade edges, a cold specular highlight along the top of the ring.\n\nSquare image.\n\nCinematic 3D product render, photoreal materials, dramatic directional rim light, high contrast. The subject is centred and fills about 90% of the frame.\n\nDraw exactly ONE single subject. Do not draw it twice, no duplicate, no turnaround sheet. Reply with the picture only. Do not describe it, do not comment on it, do not explain what you changed or point out anything about the framing.\n\nEverything outside the subject must be completely flat, uniform, solid #00FF00 pure green: one single colour, no gradient, no shadow, no reflection, no floor, no ground, no background scene, no vignette. Nothing in the subject itself may be green or greenish. No text, no writing, no numbers, no letters, no brand name, no logo, no watermark, no signature."
+ },
+ {
+  "name": "bracket_i",
+  "w": 472,
+  "h": 70,
+  "fit": "pad",
+  "keys": 1,
+  "prompt": "A galvanised steel wall-mounting bracket for an inverter: one long flat Z-folded steel rail with\na row of keyhole slots punched along it and two bolt holes at each end. Seen dead straight on\nfrom the front. Bright zinc finish with a faint spangle.\n\nExtremely wide short horizontal banner image.\n\nCinematic 3D product render, photoreal materials, dramatic directional rim light, high contrast. The subject is centred and fills about 90% of the frame.\n\nDraw exactly ONE single subject. Do not draw it twice, no duplicate, no turnaround sheet. Reply with the picture only. Do not describe it, do not comment on it, do not explain what you changed or point out anything about the framing.\n\nEverything outside the subject must be completely flat, uniform, solid #00FF00 pure green: one single colour, no gradient, no shadow, no reflection, no floor, no ground, no background scene, no vignette. Nothing in the subject itself may be green or greenish. No text, no writing, no numbers, no letters, no brand name, no logo, no watermark, no signature."
+ },
+ {
+  "name": "cable_out",
+  "w": 300,
+  "h": 170,
+  "fit": "pad",
+  "keys": 1,
+  "prompt": "Two thick black electrical cables leaving towards the right and curving down, bundled together\nwith a spiral wrap, each ending in a crimped copper lug, one with a red heat-shrink collar and\none with a black one. Seen dead straight on.\n\nWide landscape image.\n\nCinematic 3D product render, photoreal materials, dramatic directional rim light, high contrast. The subject is centred and fills about 90% of the frame.\n\nDraw exactly ONE single subject. Do not draw it twice, no duplicate, no turnaround sheet. Reply with the picture only. Do not describe it, do not comment on it, do not explain what you changed or point out anything about the framing.\n\nEverything outside the subject must be completely flat, uniform, solid #00FF00 pure green: one single colour, no gradient, no shadow, no reflection, no floor, no ground, no background scene, no vignette. Nothing in the subject itself may be green or greenish. No text, no writing, no numbers, no letters, no brand name, no logo, no watermark, no signature."
+ },
+ {
+  "name": "bg-battery",
+  "w": 1600,
+  "h": 900,
+  "fit": "bg",
+  "keys": 0,
+  "prompt": "A dim technical room housing an energy storage system: a smooth dark concrete wall, a run of\ncable tray overhead, a cold teal-green ambient glow from equipment out of shot, and one soft\npool of light on the floor. Very dark, moody, deep shadow, sparse and clean.\n\nWide cinematic 16:9 photograph, film grain, rich colour grading. No text, no logo, no watermark, no people looking at camera."
+ },
+ {
+  "name": "rack",
+  "w": 494,
+  "h": 654,
+  "fit": "pad",
+  "keys": 2,
+  "prompt": "An empty open 19-inch equipment rack frame seen perfectly flat and dead straight on from the\nfront: two vertical black powder-coated steel posts with rows of square mounting holes punched\ndown them, joined by a top and a bottom rail, standing on four short feet. Clearly taller than\nit is wide.\n\nInside the frame, stacked one above the other, are exactly FOUR rectangular slot openings that\neach span the full width between the two posts: a SHORT thin one at the top, and below it THREE\nTALLER openings of equal height, with a narrow gap between each. All four openings are filled\nwith completely flat, uniform, solid #FF00FF magenta: one single colour, no gradient, no\nreflection, no equipment, nothing at all drawn inside them. The four magenta rectangles never\ntouch each other.\n\nTall vertical portrait image.\n\nCinematic 3D product render, photoreal materials, dramatic directional rim light, high contrast. The subject is centred and fills about 90% of the frame.\n\nDraw exactly ONE single subject. Do not draw it twice, no duplicate, no turnaround sheet. Reply with the picture only. Do not describe it, do not comment on it, do not explain what you changed or point out anything about the framing.\n\nEverything outside the subject must be completely flat, uniform, solid #00FF00 pure green: one single colour, no gradient, no shadow, no reflection, no floor, no ground, no background scene, no vignette. Nothing in the subject itself may be green or greenish. No text, no writing, no numbers, no letters, no brand name, no logo, no watermark, no signature."
+ },
+ {
+  "name": "bms",
+  "w": 438,
+  "h": 86,
+  "fit": "pad",
+  "keys": 1,
+  "prompt": "The front face of a battery management unit, seen perfectly flat and dead straight on and filling\nthe frame: a wide, short, slim black anodised aluminium panel with a row of small round indicator\nLEDs glowing cyan along the left end, two recessed buttons, a small dark display window, and a\nband of fine ventilation slots along the right end.\n\nExtremely wide short horizontal banner image.\n\nCinematic 3D product render, photoreal materials, dramatic directional rim light, high contrast. The subject is centred and fills about 90% of the frame.\n\nDraw exactly ONE single subject. Do not draw it twice, no duplicate, no turnaround sheet. Reply with the picture only. Do not describe it, do not comment on it, do not explain what you changed or point out anything about the framing.\n\nEverything outside the subject must be completely flat, uniform, solid #00FF00 pure green: one single colour, no gradient, no shadow, no reflection, no floor, no ground, no background scene, no vignette. Nothing in the subject itself may be green or greenish. No text, no writing, no numbers, no letters, no brand name, no logo, no watermark, no signature."
+ },
+ {
+  "name": "cell",
+  "w": 438,
+  "h": 130,
+  "fit": "pad",
+  "keys": 1,
+  "prompt": "The front face of a rack-mounted lithium iron phosphate battery module, seen perfectly flat and\ndead straight on and filling the frame: a wide, short, slim dark navy-black brushed metal panel\nwith two chunky recessed carry handles at the ends, a strip of fine ventilation slots across the\nmiddle, and one small round indicator lamp glowing cyan.\n\nExtremely wide short horizontal banner image.\n\nCinematic 3D product render, photoreal materials, dramatic directional rim light, high contrast. The subject is centred and fills about 90% of the frame.\n\nDraw exactly ONE single subject. Do not draw it twice, no duplicate, no turnaround sheet. Reply with the picture only. Do not describe it, do not comment on it, do not explain what you changed or point out anything about the framing.\n\nEverything outside the subject must be completely flat, uniform, solid #00FF00 pure green: one single colour, no gradient, no shadow, no reflection, no floor, no ground, no background scene, no vignette. Nothing in the subject itself may be green or greenish. No text, no writing, no numbers, no letters, no brand name, no logo, no watermark, no signature."
+ },
+ {
+  "name": "led_bar",
+  "w": 52,
+  "h": 430,
+  "fit": "pad",
+  "keys": 1,
+  "prompt": "A tall narrow vertical state-of-charge indicator standing upright: a slim matte black strip\nholding a stack of twelve short glowing horizontal segments, the lower nine lit bright cyan-white\nand the top three dark and unlit. The glow stays tight to each segment and fades to nothing well\ninside the frame.\n\nExtremely tall narrow vertical portrait image.\n\nCinematic 3D product render, photoreal materials, dramatic directional rim light, high contrast. The subject is centred and fills about 90% of the frame.\n\nDraw exactly ONE single subject. Do not draw it twice, no duplicate, no turnaround sheet. Reply with the picture only. Do not describe it, do not comment on it, do not explain what you changed or point out anything about the framing.\n\nEverything outside the subject must be completely flat, uniform, solid #00FF00 pure green: one single colour, no gradient, no shadow, no reflection, no floor, no ground, no background scene, no vignette. Nothing in the subject itself may be green or greenish. No text, no writing, no numbers, no letters, no brand name, no logo, no watermark, no signature."
+ },
+ {
+  "name": "cable_b",
+  "w": 258,
+  "h": 190,
+  "fit": "pad",
+  "keys": 1,
+  "prompt": "Two heavy battery cables, one red and one black, entering from the left and curving down to the\nright, thick insulated copper with crimped ring terminals on the ends and a cable tie holding\nthem together. Seen dead straight on.\n\nWide landscape image.\n\nCinematic 3D product render, photoreal materials, dramatic directional rim light, high contrast. The subject is centred and fills about 90% of the frame.\n\nDraw exactly ONE single subject. Do not draw it twice, no duplicate, no turnaround sheet. Reply with the picture only. Do not describe it, do not comment on it, do not explain what you changed or point out anything about the framing.\n\nEverything outside the subject must be completely flat, uniform, solid #00FF00 pure green: one single colour, no gradient, no shadow, no reflection, no floor, no ground, no background scene, no vignette. Nothing in the subject itself may be green or greenish. No text, no writing, no numbers, no letters, no brand name, no logo, no watermark, no signature."
+ },
+ {
+  "name": "breaker",
+  "w": 180,
+  "h": 150,
+  "fit": "pad",
+  "keys": 1,
+  "prompt": "A DC circuit breaker enclosure seen dead straight on from the front: a small grey plastic box\nholding two double-pole breakers side by side with black toggle switches flipped up, behind a\nclear polycarbonate hinged cover with four corner screws.\n\nSquare image.\n\nCinematic 3D product render, photoreal materials, dramatic directional rim light, high contrast. The subject is centred and fills about 90% of the frame.\n\nDraw exactly ONE single subject. Do not draw it twice, no duplicate, no turnaround sheet. Reply with the picture only. Do not describe it, do not comment on it, do not explain what you changed or point out anything about the framing.\n\nEverything outside the subject must be completely flat, uniform, solid #00FF00 pure green: one single colour, no gradient, no shadow, no reflection, no floor, no ground, no background scene, no vignette. Nothing in the subject itself may be green or greenish. No text, no writing, no numbers, no letters, no brand name, no logo, no watermark, no signature."
+ },
+ {
+  "name": "bg-onreal",
+  "w": 1600,
+  "h": 900,
+  "fit": "bg",
+  "keys": 0,
+  "prompt": "A quiet Beirut residential street at night, fully lit and alive: warm golden light spilling from\napartment windows up and down both sides, a street lamp throwing a soft pool on the asphalt,\njacaranda branches overhead, the sky a deep clean navy blue. Warm, calm, prosperous, cinematic.\n\nWide cinematic 16:9 photograph, film grain, rich colour grading. No text, no logo, no watermark, no people looking at camera."
+ },
+ {
+  "name": "moon",
+  "w": 136,
+  "h": 136,
+  "fit": "pad",
+  "keys": 1,
+  "prompt": "A full moon high in a clear night sky seen through a long lens: a pale silver-white disc with\nvisible craters and dark maria, and a faint cool halo sitting tight around it that fades\ncompletely to nothing well inside the frame.\n\nSquare image.\n\nCinematic 3D product render, photoreal materials, dramatic directional rim light, high contrast. The subject is centred and fills about 90% of the frame.\n\nDraw exactly ONE single subject. Do not draw it twice, no duplicate, no turnaround sheet. Reply with the picture only. Do not describe it, do not comment on it, do not explain what you changed or point out anything about the framing.\n\nEverything outside the subject must be completely flat, uniform, solid #00FF00 pure green: one single colour, no gradient, no shadow, no reflection, no floor, no ground, no background scene, no vignette. Nothing in the subject itself may be green or greenish. No text, no writing, no numbers, no letters, no brand name, no logo, no watermark, no signature."
+ },
+ {
+  "name": "street",
+  "w": 1360,
+  "h": 180,
+  "fit": "cover",
+  "keys": 1,
+  "prompt": "A stretch of Beirut asphalt street and its kerb at night, seen from a low angle dead straight on\nand running the full width: worn dark asphalt with patches and a faded white line, a concrete\nkerb, and a strip of dusty pavement behind it. Warm amber light spills across it from above,\nleaving long soft reflections on the asphalt.\n\nExtremely wide short horizontal banner image.\n\nCinematic 3D product render, photoreal materials, dramatic directional rim light, high contrast. The subject is centred and fills about 90% of the frame.\n\nDraw exactly ONE single subject. Do not draw it twice, no duplicate, no turnaround sheet. Reply with the picture only. Do not describe it, do not comment on it, do not explain what you changed or point out anything about the framing.\n\nEverything outside the subject must be completely flat, uniform, solid #00FF00 pure green: one single colour, no gradient, no shadow, no reflection, no floor, no ground, no background scene, no vignette. Nothing in the subject itself may be green or greenish. No text, no writing, no numbers, no letters, no brand name, no logo, no watermark, no signature."
+ },
+ {
+  "name": "house",
+  "w": 716,
+  "h": 632,
+  "fit": "pad",
+  "keys": 2,
+  "prompt": "A small Lebanese family house seen perfectly flat and dead straight on from the front at night:\ntwo storeys of warm sand-coloured render with stone quoins at the corners, a flat concrete roof\nwith a low parapet, an arched front door with a stone surround at ground level, and a balcony\nwith a wrought iron railing across the upper floor. Warm night lighting washing the walls.\n\nOn the front facade there are exactly FOUR rectangular windows: THREE side by side in an evenly\nspaced row across the UPPER floor, and ONE more centred below them on the ground floor. All four\nwindows are filled with completely flat, uniform, solid #FF00FF magenta: one single colour, no\ngradient, no glass, no reflection, no curtain, no glazing bars, nothing at all drawn inside them.\nAll four magenta rectangles are exactly the same size and shape, and none of them touch anything.\n\nSquare image.\n\nCinematic 3D product render, photoreal materials, dramatic directional rim light, high contrast. The subject is centred and fills about 90% of the frame.\n\nDraw exactly ONE single subject. Do not draw it twice, no duplicate, no turnaround sheet. Reply with the picture only. Do not describe it, do not comment on it, do not explain what you changed or point out anything about the framing.\n\nEverything outside the subject must be completely flat, uniform, solid #00FF00 pure green: one single colour, no gradient, no shadow, no reflection, no floor, no ground, no background scene, no vignette. Nothing in the subject itself may be green or greenish. No text, no writing, no numbers, no letters, no brand name, no logo, no watermark, no signature."
+ },
+ {
+  "name": "roof_pv",
+  "w": 470,
+  "h": 130,
+  "fit": "pad",
+  "keys": 1,
+  "prompt": "A row of four solar panels mounted on a low rooftop rail, seen from a low front angle so the row\nreads as one long slim slab: deep blue-black monocrystalline cells with fine silver grid lines,\nslim aluminium frames, tilted slightly back. Night time, lit by cool moonlight from above with a\nfaint warm glow rising from below.\n\nExtremely wide short horizontal banner image.\n\nCinematic 3D product render, photoreal materials, dramatic directional rim light, high contrast. The subject is centred and fills about 90% of the frame.\n\nDraw exactly ONE single subject. Do not draw it twice, no duplicate, no turnaround sheet. Reply with the picture only. Do not describe it, do not comment on it, do not explain what you changed or point out anything about the framing.\n\nEverything outside the subject must be completely flat, uniform, solid #00FF00 pure green: one single colour, no gradient, no shadow, no reflection, no floor, no ground, no background scene, no vignette. Nothing in the subject itself may be green or greenish. No text, no writing, no numbers, no letters, no brand name, no logo, no watermark, no signature."
+ },
+ {
+  "name": "window",
+  "w": 132,
+  "h": 118,
+  "fit": "pad",
+  "keys": 1,
+  "prompt": "A single lit window at night seen perfectly flat and dead straight on and filling the frame: a\nwhite painted wooden window frame divided into four panes, warm golden light glowing out from\ninside, and the hint of a curtain edge and a warm interior wall visible behind the glass.\n\nSquare image.\n\nCinematic 3D product render, photoreal materials, dramatic directional rim light, high contrast. The subject is centred and fills about 90% of the frame.\n\nDraw exactly ONE single subject. Do not draw it twice, no duplicate, no turnaround sheet. Reply with the picture only. Do not describe it, do not comment on it, do not explain what you changed or point out anything about the framing.\n\nEverything outside the subject must be completely flat, uniform, solid #00FF00 pure green: one single colour, no gradient, no shadow, no reflection, no floor, no ground, no background scene, no vignette. Nothing in the subject itself may be green or greenish. No text, no writing, no numbers, no letters, no brand name, no logo, no watermark, no signature."
+ },
+ {
+  "name": "icons",
+  "w": 0,
+  "h": 0,
+  "fit": "sheet",
+  "keys": 1,
+  "slices": [
+   "ac",
+   "wifi",
+   "fridge"
+  ],
+  "prompt": "Three separate household objects arranged in one horizontal row, clearly separated with a wide\ngap of plain flat background between them, none of them touching or overlapping each other:\n\nFIRST, on the left, a white wall-mounted split air-conditioner indoor unit seen dead straight on\nfrom the front, its louvre open and one small status light glowing cyan.\nSECOND, in the middle, a small white wifi router seen dead straight on from the front, standing\non its base with two upright antennas and a row of small blue indicator lights across it.\nTHIRD, on the right, a tall white two-door refrigerator seen dead straight on from the front,\nwith slim vertical brushed steel handles and a faint warm light leaking from the door seam.\n\nAll three are drawn in the same style at the same quality, lit the same way from the upper left\nwith a warm night light, with a cool rim light down their right edges.\n\nCinematic 3D product render, photoreal materials, dramatic directional rim light, high contrast. The subject is centred and fills about 90% of the frame.\n\nEverything outside the subject must be completely flat, uniform, solid #00FF00 pure green: one single colour, no gradient, no shadow, no reflection, no floor, no ground, no background scene, no vignette. Nothing in the subject itself may be green or greenish. No text, no writing, no numbers, no letters, no brand name, no logo, no watermark, no signature."
+ }
+]

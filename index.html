@@ -1,0 +1,736 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>24/24 — Solar Layer Slider</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@300;400;500&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --shell:#05070b;
+    --ink:#f2f5f8;
+    --volt:#ffc247;      /* brand amber */
+    --cool:#63dcff;      /* the current / surge */
+    --tint:#0a0b0f;      /* per-slide, set by JS */
+    --glow:#f06a1e;      /* per-slide, set by JS */
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:var(--shell);overflow:hidden}
+  body{font-family:Inter,system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+
+  .pw{position:relative;width:100%;height:100vh;height:100svh;min-height:560px;overflow:hidden;background:var(--shell)}
+
+  /* ---------- stage ---------- */
+  .pw-stage{position:absolute;inset:0;overflow:hidden;--s:1}
+  .pw-slide{position:absolute;inset:0;visibility:hidden}
+
+  .pw-bg{position:absolute;inset:0;background-color:var(--tint);background-size:cover;background-position:center;will-change:clip-path}
+  .pw-bg::after{content:'';position:absolute;inset:0;
+       background:radial-gradient(120% 90% at 72% 38%, color-mix(in srgb, var(--glow) 34%, transparent), transparent 62%),
+                  radial-gradient(90% 70% at 14% 96%, rgba(0,0,0,.72), transparent 60%)}
+  .pw-bg-label{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);z-index:2;
+       font:500 10px/1 ui-monospace,Consolas,monospace;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.34);white-space:nowrap}
+
+  /* the 1280x900 design space, scaled to cover */
+  .pw-scene,.pw-fx{position:absolute;left:50%;top:50%;width:1280px;height:900px;transform:translate(-50%,-50%) scale(var(--s))}
+  /* the current sits above the dimmer — it is the brightest thing on screen */
+  .pw-fx{pointer-events:none;z-index:13}
+  .pw-layer{position:absolute;will-change:transform,opacity}
+  .pw-layer img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;pointer-events:none;user-select:none}
+  .pw-layer .gl{position:absolute;inset:-18%;border-radius:50%;opacity:0;pointer-events:none;
+       background:radial-gradient(closest-side, color-mix(in srgb, var(--glow) 70%, transparent), transparent 72%);mix-blend-mode:screen}
+
+  /* ---------- placeholders (shown until a layer gets an image) ---------- */
+  .ph{position:absolute;inset:0;display:grid;place-items:center;text-align:center;
+      border:1.5px dashed rgba(255,255,255,.42);background:rgba(255,255,255,.055);color:rgba(255,255,255,.66);
+      font:500 10px/1.35 ui-monospace,Consolas,monospace;letter-spacing:.1em;text-transform:uppercase;
+      --ln:rgba(255,255,255,.17)}
+  .ph--panel{background-image:repeating-linear-gradient(90deg,transparent 0 44px,var(--ln) 44px 45px),
+                              repeating-linear-gradient(0deg,transparent 0 44px,var(--ln) 44px 45px)}
+  .ph--cell{background-image:repeating-linear-gradient(0deg,transparent 0 16px,var(--ln) 16px 17px);border-radius:6px}
+  .ph--rack{background-image:repeating-linear-gradient(0deg,transparent 0 74px,var(--ln) 74px 76px);border-radius:10px}
+  .ph--box{border-radius:10px}
+  .ph--screen{border-radius:6px;background:color-mix(in srgb, var(--glow) 16%, rgba(255,255,255,.05))}
+  .ph--round{border-radius:50%}
+  .ph--bulb{border-radius:50% 50% 45% 45%;animation:flick 3.4s steps(1) infinite}
+  .ph--sun{border-radius:50%;background:radial-gradient(closest-side, color-mix(in srgb, var(--glow) 48%, transparent), rgba(255,255,255,.05))}
+  .ph--house{border-radius:8px;clip-path:polygon(50% 0,100% 30%,100% 100%,0 100%,0 30%)}
+  .ph--roof{border-radius:4px;background-image:repeating-linear-gradient(115deg,transparent 0 22px,var(--ln) 22px 23px)}
+  .ph--cloud{border-radius:52% 48% 60% 40%/62% 58% 42% 38%}
+  .ph--wire{border:0;background:
+       linear-gradient(transparent calc(50% - 1px), rgba(255,255,255,.28) 50%, transparent calc(50% + 1px)),
+       radial-gradient(80% 140% at 30% -40%, transparent 68%, rgba(255,255,255,.22) 69%, transparent 71%)}
+  .ph--beam{border:0;background:linear-gradient(to bottom, color-mix(in srgb, var(--glow) 55%, transparent), transparent);opacity:.4;font-size:0}
+  .ph--shadow{border:0;background:radial-gradient(closest-side, rgba(0,0,0,.55), transparent);font-size:0}
+  .ph--smoke{border:0;background:radial-gradient(closest-side, rgba(255,255,255,.13), transparent);font-size:0;filter:blur(2px)}
+  .ph--icon{border-radius:14px;font-size:9px}
+  /* container-sized layers label at the top, so a child layer's label doesn't land on theirs */
+  .ph--top{align-items:start;padding-top:12px}
+  .ph--br{align-items:end;justify-items:end;padding:0 18px 14px 0}
+  @keyframes flick{0%,92%{opacity:1}93%{opacity:.25}94%{opacity:.9}96%{opacity:.2}97%,100%{opacity:1}}
+
+  /* ---------- spec pins ---------- */
+  .pw-pin{position:absolute;display:flex;align-items:center;gap:10px;white-space:nowrap;opacity:0}
+  .pw-pin.l{flex-direction:row-reverse}
+  .pw-pin .dot{width:9px;height:9px;border-radius:50%;background:var(--volt);box-shadow:0 0 0 5px color-mix(in srgb, var(--volt) 22%, transparent);flex:0 0 auto}
+  .pw-pin .line{width:72px;height:1px;background:linear-gradient(90deg, var(--volt), color-mix(in srgb, var(--volt) 18%, transparent));transform-origin:left center}
+  .pw-pin.l .line{background:linear-gradient(270deg, var(--volt), color-mix(in srgb, var(--volt) 18%, transparent));transform-origin:right center}
+  .pw-pin .txt{display:block;text-align:left}
+  .pw-pin.l .txt{text-align:right}
+  .pw-pin .txt b{display:block;font:600 19px/1 "Barlow Condensed",sans-serif;letter-spacing:.5px;color:#fff}
+  .pw-pin .txt i{display:block;font:400 9px/1.6 ui-monospace,Consolas,monospace;font-style:normal;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.5)}
+
+  /* ---------- the cable + surge ---------- */
+  .pw-cable{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+  .pw-cable .base{fill:none;stroke:rgba(255,255,255,.14);stroke-width:2}
+  .pw-cable .surge{fill:none;stroke:var(--cool);stroke-width:3.5;stroke-linecap:round;
+       filter:drop-shadow(0 0 7px var(--cool)) drop-shadow(0 0 20px color-mix(in srgb, var(--cool) 60%, transparent))}
+  .pw-spark{position:absolute;left:0;top:0;width:26px;height:26px;margin:-13px 0 0 -13px;border-radius:50%;opacity:0;
+       background:radial-gradient(closest-side,#fff,var(--cool) 42%,transparent 72%);
+       filter:drop-shadow(0 0 16px var(--cool))}
+  .pw-flash{position:absolute;inset:0;z-index:11;pointer-events:none;opacity:0;background:
+       radial-gradient(70% 55% at 50% 45%, rgba(255,255,255,.92), rgba(255,255,255,0) 68%)}
+  .pw-lum{position:absolute;inset:0;z-index:10;pointer-events:none;background:#000;opacity:.82}
+  /* keeps the copy readable whatever the layers behind it are doing */
+  .pw-scrim{position:absolute;inset:0;z-index:12;pointer-events:none;
+       background:linear-gradient(90deg, rgba(4,6,10,.9) 0%, rgba(4,6,10,.66) 26%, rgba(4,6,10,0) 56%)}
+
+  /* ---------- copy ---------- */
+  .pw-copy{position:absolute;left:6.6%;top:50%;transform:translateY(-50%);width:min(470px,44%);z-index:14;display:grid}
+  .pw-text{grid-area:1/1;visibility:hidden}
+  .m{display:block;overflow:hidden}
+  .m > *{display:block;will-change:transform}
+
+  .pw-kicker{margin:0 0 14px}
+  .pw-kicker span{font:500 10px/1 ui-monospace,Consolas,monospace;letter-spacing:.3em;text-transform:uppercase;color:var(--volt)}
+  .pw-title{margin:0}
+  .pw-title span{font:700 clamp(54px,6.4vw,92px)/.92 "Barlow Condensed",sans-serif;letter-spacing:-1px;text-transform:uppercase}
+  .pw-sub{margin:6px 0 0}
+  .pw-sub span{font:500 20px/1.2 Tajawal,sans-serif;color:color-mix(in srgb, var(--volt) 78%, #fff);opacity:.92}
+  .pw-desc{margin:22px 0 0}
+  .pw-desc span{font:300 15.5px/1.72 Inter,sans-serif;color:rgba(242,245,248,.76)}
+  .pw-cta{margin-top:30px}
+  .pw-btn{display:inline-flex !important;align-items:center;gap:12px;height:52px;padding:0 26px;background:var(--volt);color:#0a0b0f;
+          text-decoration:none;font:500 12px/1 Inter,sans-serif;letter-spacing:.22em;text-transform:uppercase;transition:background .3s,color .3s,gap .3s}
+  .pw-btn:hover{background:#fff;gap:18px}
+  .pw-btn svg{width:15px;height:15px}
+
+  body.ar .pw-copy{direction:rtl;text-align:right}
+  body.ar .pw-desc span{font:400 16px/1.95 Tajawal,sans-serif}
+  body.ar .pw-btn{flex-direction:row-reverse;font-family:Tajawal,sans-serif;letter-spacing:0;font-size:14px}
+  body.ar .pw-btn svg{transform:scaleX(-1)}
+  body.ar .pw-pin .txt b{font-family:Tajawal,sans-serif}
+
+  /* ---------- chrome ---------- */
+  .pw-top{position:absolute;left:52px;right:52px;top:38px;z-index:20;display:flex;align-items:center;justify-content:space-between;pointer-events:none}
+  .pw-top > *{pointer-events:auto}
+  .pw-logo{display:flex;align-items:center;gap:11px;color:var(--ink);text-decoration:none}
+  .pw-logo svg{width:30px;height:30px;color:var(--volt)}
+  .pw-logo b{font:700 25px/1 "Barlow Condensed",sans-serif;letter-spacing:1px}
+  .pw-logo i{font:400 9px/1 ui-monospace,Consolas,monospace;font-style:normal;letter-spacing:.24em;text-transform:uppercase;color:rgba(242,245,248,.45);display:block;margin-top:3px}
+  .pw-tools{display:flex;align-items:center;gap:26px}
+  .pw-lang{display:flex;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.03)}
+  .pw-lang button{width:44px;height:30px;padding:0;background:none;border:0;color:rgba(242,245,248,.55);cursor:pointer;
+       font:500 11px/1 Inter,sans-serif;letter-spacing:.1em;transition:background .25s,color .25s}
+  .pw-lang button.on{background:var(--volt);color:#0a0b0f}
+  .pw-lang button:last-child{font-family:Tajawal,sans-serif;font-size:14px}
+  .pw-social{display:flex;gap:18px}
+  .pw-social a{color:rgba(242,245,248,.62);width:20px;height:20px;display:grid;place-items:center;transition:color .3s,transform .3s}
+  .pw-social a:hover{color:var(--volt);transform:translateY(-2px)}
+  .pw-social svg{width:18px;height:18px}
+
+  /* live meter */
+  .pw-meter{position:absolute;right:52px;top:50%;transform:translateY(-50%);z-index:20;text-align:right}
+  .pw-meter b{display:block;font:700 46px/1 "Barlow Condensed",sans-serif;color:var(--volt);letter-spacing:-1px;font-variant-numeric:tabular-nums}
+  .pw-meter > i{display:block;font:400 9px/1 ui-monospace,Consolas,monospace;font-style:normal;letter-spacing:.2em;text-transform:uppercase;color:rgba(242,245,248,.45);margin-top:6px}
+  .pw-meter .bars{display:flex;gap:4px;justify-content:flex-end;margin-top:14px}
+  .pw-meter .bars i{width:6px;height:26px;background:rgba(255,255,255,.14);margin:0;transition:background .45s}
+  .pw-meter .bars i.on{background:var(--volt)}
+
+  .pw-thumbs{position:absolute;right:52px;bottom:150px;z-index:20;display:flex;flex-direction:column;gap:2px}
+  .pw-thumb{display:flex;align-items:center;justify-content:flex-end;gap:12px;height:34px;padding:0;background:none;border:0;cursor:pointer;outline:none}
+  .pw-thumb u{text-decoration:none;font:500 10px/1 ui-monospace,Consolas,monospace;letter-spacing:.14em;color:rgba(242,245,248,.38);transition:color .3s}
+  .pw-thumb s{text-decoration:none;display:block;width:26px;height:1px;background:rgba(255,255,255,.22);transform-origin:right center;transition:transform .35s,background .35s}
+  .pw-thumb:hover u,.pw-thumb:focus-visible u{color:var(--ink)}
+  .pw-thumb.is-active u{color:var(--volt)}
+  .pw-thumb.is-active s{background:var(--volt);transform:scaleX(2.1)}
+
+  .pw-arrows{position:absolute;right:52px;bottom:52px;z-index:20;display:flex;gap:1px}
+  .pw-arrow{width:54px;height:54px;padding:0;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.14);color:var(--ink);
+       cursor:pointer;display:grid;place-items:center;transition:background .3s,border-color .3s,color .3s}
+  .pw-arrow:hover,.pw-arrow:focus-visible{background:var(--volt);border-color:var(--volt);color:#0a0b0f;outline:none}
+  .pw-arrow svg{width:30px;height:12px}
+
+  .pw-credit{position:absolute;left:52px;bottom:52px;z-index:20;transform-origin:left bottom;transform:rotate(-90deg) translateY(100%);
+       font:400 10px/1 ui-monospace,Consolas,monospace;letter-spacing:.22em;text-transform:uppercase;color:rgba(242,245,248,.38);white-space:nowrap}
+  .pw-prog{position:absolute;left:0;bottom:0;height:2px;width:100%;z-index:20;background:rgba(255,255,255,.08)}
+  .pw-prog i{display:block;height:100%;width:0;background:var(--volt);transition:width .7s cubic-bezier(.4,0,.1,1)}
+
+  /* ---------- reel mode: ?reel=1 ---------- */
+  body.reel{background:#000;display:grid;place-items:center}
+  body.reel .pw{width:min(100vw, calc(100svh * 9 / 16));height:100svh;max-height:calc(100vw * 16 / 9)}
+  body.reel .pw-arrows,body.reel .pw-credit,body.reel .pw-social,body.reel .pw-pin{display:none}
+  body.reel .pw-meter{right:7%}
+  body.reel .pw-meter b{font-size:36px}
+  body.reel .pw-copy{left:7%;right:7%;width:auto;top:auto;bottom:15%;transform:none}
+  body.reel .pw-title span{font-size:clamp(46px,11vw,78px)}
+  body.reel .pw-meter{top:22%;transform:none}
+  body.reel .pw-scrim{background:linear-gradient(0deg, rgba(4,6,10,.92) 0%, rgba(4,6,10,.7) 32%, rgba(4,6,10,0) 62%)}
+  body.reel .pw-thumbs{bottom:6%;right:auto;left:7%;flex-direction:row;gap:14px}
+  body.reel .pw-thumb s{display:none}
+
+  /* ---------- small screens ---------- */
+  @media (max-width:900px){
+    .pw-copy{left:24px;right:24px;width:auto;top:auto;bottom:118px;transform:none}
+    .pw-scrim{background:linear-gradient(0deg, rgba(4,6,10,.93) 0%, rgba(4,6,10,.72) 34%, rgba(4,6,10,0) 64%)}
+    .pw-title span{font-size:clamp(42px,13vw,64px)}
+    .pw-sub span{font-size:17px}
+    .pw-desc{margin-top:14px}
+    .pw-desc span{font-size:13.5px;line-height:1.62}
+    .pw-cta{margin-top:20px}
+    .pw-btn{height:46px;padding:0 20px;font-size:11px}
+    .pw-top{left:20px;right:20px;top:20px}
+    .pw-social{display:none}
+    .pw-meter{right:20px;top:96px;transform:none}
+    .pw-meter b{font-size:34px}
+    .pw-meter .bars{display:none}
+    .pw-credit{display:none}
+    .pw-thumbs{right:auto;left:24px;bottom:62px;flex-direction:row;gap:14px}
+    .pw-thumb s{display:none}
+    .pw-arrows{right:20px;bottom:44px}
+    .pw-arrow{width:44px;height:44px}
+    .pw-pin{display:none}
+  }
+</style>
+</head>
+<body>
+
+<div class="pw" id="pw">
+  <div class="pw-stage" id="stage"></div>
+
+  <div class="pw-fx">
+    <svg class="pw-cable" viewBox="0 0 1280 900" aria-hidden="true">
+      <path id="cableBase"  class="base"  d="M -60 742 C 240 812, 392 470, 638 470 S 1010 556, 1348 246"/>
+      <path id="cableSurge" class="surge" d="M -60 742 C 240 812, 392 470, 638 470 S 1010 556, 1348 246"/>
+    </svg>
+    <div class="pw-spark" id="spark"></div>
+  </div>
+
+  <div class="pw-lum" id="lum"></div>
+  <div class="pw-flash" id="flash"></div>
+  <div class="pw-scrim"></div>
+
+  <div class="pw-copy" id="copy"></div>
+
+  <header class="pw-top">
+    <a class="pw-logo" href="#" aria-label="24/24 home">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M13.6 1 4 13.4h6.1L9.4 23 20 10.2h-6.7z"/></svg>
+      <span><b>24/24</b><i>Solar &amp; Storage</i></span>
+    </a>
+    <div class="pw-tools">
+      <div class="pw-lang" id="lang">
+        <button type="button" class="on" data-lang="en">EN</button>
+        <button type="button" data-lang="ar">ع</button>
+      </div>
+      <nav class="pw-social" aria-label="Social">
+        <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="17.4" cy="6.6" r="1.2" fill="currentColor"/></svg></a>
+        <a href="#" aria-label="WhatsApp"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2m0 2a8 8 0 1 1-4.1 14.9l-.4-.2-2.6.7.7-2.5-.2-.4A8 8 0 0 1 12 4m-2.6 4c-.2 0-.5 0-.7.4-.3.3-.9.9-.9 2.1s.9 2.4 1 2.6c.2.2 1.8 2.8 4.4 3.8 2.2.8 2.6.7 3.1.6.5 0 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2l-.6-.3-1.7-.8c-.2 0-.4-.1-.6.2l-.8 1c-.1.2-.3.2-.5.1a6.5 6.5 0 0 1-3.2-2.8c-.2-.4 0-.5.2-.7l.4-.5.3-.5v-.5l-.8-1.9c-.2-.4-.4-.4-.6-.4z"/></svg></a>
+        <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M13.5 22v-8h2.8l.5-3.3h-3.3V8.6c0-1 .4-1.7 1.8-1.7h1.6V4a21 21 0 0 0-2.4-.2c-2.6 0-4.3 1.6-4.3 4.4v2.5H7.4V14h2.8v8z"/></svg></a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="pw-meter" aria-hidden="true">
+    <b id="kwh">0.0</b>
+    <i id="kwhLabel">kWh / day</i>
+    <div class="bars" id="bars"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  </div>
+
+  <nav class="pw-thumbs" id="thumbs" aria-label="Slides"></nav>
+
+  <div class="pw-arrows">
+    <button class="pw-arrow" id="prev" aria-label="Previous"><svg viewBox="0 0 30 12"><path d="M29 6H1M7 1 1 6l6 5" fill="none" stroke="currentColor" stroke-width="1.2"/></svg></button>
+    <button class="pw-arrow" id="next" aria-label="Next"><svg viewBox="0 0 30 12"><path d="M1 6h28M23 1l6 5-6 5" fill="none" stroke="currentColor" stroke-width="1.2"/></svg></button>
+  </div>
+
+  <div class="pw-credit">Digital Dot Developer</div>
+  <div class="pw-prog"><i id="prog"></i></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/MotionPathPlugin.min.js"></script>
+<script>
+/* =====================================================================
+   24/24 — a layers-only slider about solar + storage in Lebanon.
+   Slide 00 is a blackout; every slide after it is brighter than the last,
+   and the current running down the cable is what swaps the scene.
+
+   Drop renders into SLIDES[i].images — the key must match a layer id in
+   LAYOUT[slide.key]. Anything left empty draws a dashed placeholder with
+   its name and size, so the thing is presentable before the art exists.
+   All geometry is in the 1280x900 design space.
+
+     ?slow=4   slow the whole timeline down to study the motion
+     ?reel=1   9:16 autoplay loop for screen-recording an Instagram reel
+     ?auto=1   autoplay at the normal aspect ratio
+   ===================================================================== */
+
+const SLIDES = [
+  { key:'blackout', tint:'#0a0b0f', glow:'#f06a1e', lum:.22, kwh:0,
+    kicker:'The part everyone knows',
+    en:'Blackout', ar:'عتمة',
+    text:'Two hours a day from the grid. A moteur bill that eats a third of the salary, and that rumble under every balcony in the country.',
+    textAr:'ساعتين باليوم من الدولة. فاتورة موتور بتاكل تلت الراتب، وهدير تحت كل شرفة بالبلد.',
+    cta:'Show me the fix', ctaAr:'وريني الحل',
+    specs:[ {x:492,y:540,side:'r',v:'2 h/day',k:'From the grid'},
+            {x:900,y:660,side:'r',v:'$80/mo',k:'Moteur · 5A'},
+            {x:700,y:300,side:'r',v:'78 dB',k:'Under the window'} ],
+    images:{ skyline:'img/skyline.webp', tower_l:'img/tower_l.webp', tower_r:'img/tower_r.webp', wires:'img/wires.webp', bulb:'img/bulb.webp', meter:'img/meter.webp', moteur:'img/moteur.webp' } },
+
+  { key:'panels', tint:'#16283a', glow:'#7fd0ff', lum:.54, kwh:9.4,
+    kicker:'Step 01 — collect',
+    en:'Panels', ar:'ألواح',
+    text:'Ten 550-watt monocrystalline panels, mounted and grounded on your own roof. Beirut hands you three hundred sunny days a year. We just stop throwing them away.',
+    textAr:'عشر ألواح مونوكريستال ٥٥٠ واط، مركّبة ومأرّضة على سطحك. بيروت بتعطيك تلتمية يوم شمس بالسنة، نحنا بس منوقّف نضيّعهن.',
+    cta:'Book a free survey', ctaAr:'احجز معاينة مجانية',
+    specs:[ {x:700,y:236,side:'r',v:'5.5 kWp',k:'Array size'},
+            {x:880,y:470,side:'r',v:'10 panels',k:'550 W mono'},
+            {x:620,y:726,side:'r',v:'25 yrs',k:'Output warranty'} ],
+    images:{} },
+
+  { key:'inverter', tint:'#0f1620', glow:'#ffc247', lum:.62, kwh:18.2,
+    kicker:'Step 02 — decide',
+    en:'Inverter', ar:'عاكس',
+    text:'A 6 kW hybrid inverter is the brain of the house. Sun first, battery second, grid last — and it changes its mind in under ten milliseconds. You never see the lights blink.',
+    textAr:'عاكس هجين ٦ كيلوواط هوّي دماغ البيت. الشمس أول، البطارية تاني، الدولة آخر شي — وبيبدّل بأقل من عشر ميلي ثانية. عمرك ما بتشوف الضو يرفّ.',
+    cta:'See the spec sheet', ctaAr:'شوف المواصفات',
+    specs:[ {x:872,y:250,side:'r',v:'6 kW',k:'Hybrid, 48 V'},
+            {x:872,y:452,side:'r',v:'< 10 ms',k:'Transfer time'},
+            {x:872,y:700,side:'r',v:'97.6 %',k:'Peak efficiency'} ],
+    images:{} },
+
+  { key:'battery', tint:'#0d1a19', glow:'#3fe3a6', lum:.71, kwh:24.6,
+    kicker:'Step 03 — keep',
+    en:'Battery', ar:'بطارية',
+    text:'14.3 kWh of LiFePO₄, rack-mounted, sealed and silent. It carries the house through the night — and through the grey week in January when the sun never really shows up.',
+    textAr:'١٤٫٣ كيلوواط ساعة ليثيوم فوسفات، مركّبة عالرف، مختومة وبلا صوت. بتشيل البيت طول الليل، وطول أسبوع كانون الرمادي لما الشمس ما بتطلع.',
+    cta:'Size mine', ctaAr:'احسبلي القياس',
+    specs:[ {x:898,y:250,side:'r',v:'14.3 kWh',k:'Usable storage'},
+            {x:970,y:520,side:'r',v:'6000 cyc',k:'LiFePO₄ cells'},
+            {x:898,y:790,side:'r',v:'0 dB',k:'Noise output'} ],
+    images:{} },
+
+  { key:'onreal', tint:'#0b1220', glow:'#ffd27a', lum:.95, kwh:31.0,
+    kicker:'And then',
+    en:'24/24', ar:'٢٤/٢٤',
+    text:'Lights, fridge, wifi, the AC in August at three in the morning — with the moteur switched off for good. The system pays itself back in about eighteen months and then it just keeps going.',
+    textAr:'ضو، براد، واي فاي، والمكيّف بآب الساعة تلاتة الصبح — والموتور مطفّي للأبد. المنظومة بتسترجع كلفتها بحوالي تمنتعشر شهر، وبعدها بتضلّ شغالة.',
+    cta:'Cancel your moteur', ctaAr:'الغِ اشتراك الموتور',
+    specs:[ {x:880,y:250,side:'r',v:'24 / 24',k:'Uptime'},
+            {x:1004,y:512,side:'r',v:'0 L',k:'Diesel burned'},
+            {x:700,y:842,side:'r',v:'18 mo',k:'Payback'} ],
+    images:{} },
+];
+
+/* =====================================================================
+   LAYOUT — the cut-outs, per slide. Geometry + choreography.
+   x/y inside in.from / out.to accept 'top' | 'bottom' | 'left' | 'right',
+   meaning "just outside the stage on that side" (mirrored going backwards).
+   glow:n gives a layer a light bloom that ignites n seconds after it lands
+   — that is how the house wakes up window by window on the last slide.
+   ===================================================================== */
+const L = (id, x, y, w, h, ph, o = {}) => ({ id, x, y, w, h, ph, label:(o.label !== undefined ? o.label : id), ...o });
+
+const DEF_IN  = { delay:0, dur:1.15, ease:'power3.out', from:{ y:'bottom', opacity:0 } };
+const DEF_OUT = { delay:0, dur:.85, ease:'power2.in', to:{ opacity:0, scale:.94 } };
+
+const LAYOUT = {
+  blackout:[
+    L('skyline',   -40, 470, 1360, 470, 'box',   { label:'skyline 1360×470', phTop:1, in:{ delay:0, dur:1.4, ease:'power2.out', from:{ y:120, opacity:0 } }, out:{ dur:1, to:{ y:90, opacity:0 } } }),
+    L('tower_l',    74, 186,  250, 560, 'box',   { label:'tower L<br>250×560', in:{ delay:.06, dur:1.3, from:{ y:'bottom' } }, out:{ dur:.9, to:{ y:'bottom', opacity:0 } } }),
+    L('tower_r',   972, 252,  236, 500, 'box',   { label:'tower R<br>236×500', in:{ delay:.14, dur:1.3, from:{ y:'bottom' } }, out:{ dur:.9, to:{ y:'bottom', opacity:0 } } }),
+    L('wires',     -60,  96, 1400, 210, 'wire',  { label:'', in:{ delay:0, dur:1.5, ease:'power2.out', from:{ y:'top', opacity:0 } }, out:{ dur:.9, to:{ y:'top', opacity:0 } } }),
+    L('bulb',      600, 244,   84, 146, 'bulb',  { label:'bulb<br>84×146', origin:'50% 0%', glow:.9,
+                                                   in:{ delay:.25, dur:1.5, ease:'elastic.out(1,.55)', from:{ y:'top', rotation:-24 } }, out:{ dur:.8, to:{ y:'top', rotation:30, opacity:0 } } }),
+    L('meter',     328, 400,  146, 184, 'box',   { label:'meter<br>146×184', in:{ delay:.34, dur:1.1, from:{ x:'left', opacity:0 } }, out:{ dur:.9, to:{ x:'left', opacity:0 } } }),
+    L('moteur',    742, 596,  322, 232, 'box',   { label:'generator<br>322×232', in:{ delay:.2, dur:1.2, from:{ x:'right', opacity:0 } }, out:{ dur:1, to:{ x:'right', rotation:6, opacity:0 } } }),
+    L('smoke',     800, 400,  150, 232, 'smoke', { label:'', in:{ delay:.7, dur:1.6, ease:'power1.out', from:{ y:90, opacity:0, scale:.6 } }, out:{ dur:.7, to:{ y:-70, opacity:0 } } }),
+    L('candle',    482, 676,   64, 148, 'box',   { label:'candle<br>64×148', glow:1.2, in:{ delay:.46, dur:1.1, from:{ y:'bottom' } }, out:{ dur:.8, to:{ y:'bottom', opacity:0 } } }),
+    L('shadow',    240, 792,  820, 120, 'shadow',{ label:'', in:{ delay:.5, dur:1.2, from:{ scale:.4, opacity:0 } }, out:{ dur:.7, to:{ opacity:0 } } }),
+  ],
+
+  panels:[
+    L('sun',       978,  54,  226, 226, 'sun',   { label:'sun<br>226×226', glow:.5,
+                                                   in:{ delay:.1, dur:1.6, ease:'power2.out', from:{ x:'right', y:-120, rotation:-90, opacity:0 } }, out:{ dur:1.1, to:{ x:'right', rotation:90, opacity:0 } } }),
+    L('cloud',     104, 126,  306, 122, 'cloud', { label:'cloud<br>306×122', in:{ delay:0, dur:1.9, ease:'power1.out', from:{ x:'left', opacity:0 } }, out:{ dur:1.3, to:{ x:-420, opacity:0 } } }),
+    L('beam1',     372,  72,   46, 300, 'beam',  { label:'', rot:16, in:{ delay:.85, dur:.9, ease:'power2.out', from:{ scaleY:0, opacity:0 } }, out:{ dur:.5, to:{ scaleY:0, opacity:0 } } }),
+    L('beam2',     596,  40,   46, 340, 'beam',  { label:'', rot:10, in:{ delay:.95, dur:.9, ease:'power2.out', from:{ scaleY:0, opacity:0 } }, out:{ dur:.5, to:{ scaleY:0, opacity:0 } } }),
+    L('beam3',     806,  86,   46, 300, 'beam',  { label:'', rot:4,  in:{ delay:1.05, dur:.9, ease:'power2.out', from:{ scaleY:0, opacity:0 } }, out:{ dur:.5, to:{ scaleY:0, opacity:0 } } }),
+    L('roof',      -40, 686, 1360, 240, 'roof',  { label:'roof deck 1360×240', phTop:1, in:{ delay:0, dur:1.3, ease:'power3.out', from:{ y:'bottom' } }, out:{ dur:1, to:{ y:'bottom' } } }),
+    L('panel_a',   244, 286,  566, 356, 'panel', { label:'panel array A<br>566×356', rot:-13, origin:'50% 100%',
+                                                   in:{ delay:.3, dur:1.35, ease:'back.out(1.3)', from:{ y:'bottom', rotation:-60, opacity:0 } }, out:{ dur:1, to:{ y:'bottom', rotation:-62, opacity:0 } } }),
+    L('panel_b',   824, 402,  338, 226, 'panel', { label:'panel array B<br>338×226', rot:-13, origin:'50% 100%',
+                                                   in:{ delay:.46, dur:1.35, ease:'back.out(1.3)', from:{ y:'bottom', rotation:-60, opacity:0 } }, out:{ dur:1, to:{ y:'bottom', rotation:-62, opacity:0 } } }),
+    L('bracket',   318, 612,  430,  96, 'box',   { label:'mounting rail<br>430×96', in:{ delay:.18, dur:1.1, from:{ y:'bottom', opacity:0 } }, out:{ dur:.9, to:{ y:'bottom', opacity:0 } } }),
+    L('bird',      140, 330,   90,  54, 'box',   { label:'bird', in:{ delay:1.25, dur:1.8, ease:'power1.inOut', from:{ x:'left', y:70, opacity:0 } }, out:{ dur:1, to:{ x:'right', y:-60, opacity:0 } } }),
+  ],
+
+  inverter:[
+    L('wall',      170, 104,  940, 716, 'box',   { label:'wall plate 940×716', phTop:1, in:{ delay:0, dur:1.2, ease:'power2.out', from:{ scale:1.08, opacity:0 } }, out:{ dur:.9, to:{ scale:1.05, opacity:0 } } }),
+    L('cable_in',  198, 118,  268, 150, 'wire',  { label:'', in:{ delay:.15, dur:1.2, from:{ y:'top', opacity:0 } }, out:{ dur:.8, to:{ y:'top', opacity:0 } } }),
+    L('inv_body',  428, 212,  424, 524, 'box',   { label:'inverter body<br>424×524', phTop:1, in:{ delay:.22, dur:1.3, ease:'power3.out', from:{ y:'bottom', opacity:0 } }, out:{ dur:.95, to:{ y:'bottom', opacity:0 } } }),
+    L('inv_cover', 428, 212,  424, 524, 'box',   { label:'front cover<br>(explodes off)', in:{ delay:.5, dur:1.4, ease:'power3.out', from:{ x:'left', rotation:-14, opacity:0 } }, out:{ dur:1.1, ease:'power2.inOut', to:{ x:'left', rotation:-18, opacity:0 } } }),
+    L('inv_screen',498, 288,  284, 152, 'screen',{ label:'LCD 284×152', glow:.65, in:{ delay:.72, dur:.9, ease:'power2.out', from:{ scale:.8, opacity:0 } }, out:{ dur:.6, to:{ scale:.86, opacity:0 } } }),
+    L('fan',       556, 544,  168, 168, 'round', { label:'fan<br>168', in:{ delay:.62, dur:1.5, ease:'power3.out', from:{ rotation:-220, scale:.5, opacity:0 } }, out:{ dur:1, to:{ rotation:260, scale:.6, opacity:0 } } }),
+    L('bracket_i', 404, 720,  472,  70, 'box',   { label:'wall bracket 472×70', in:{ delay:.1, dur:1.1, from:{ y:'bottom', opacity:0 } }, out:{ dur:.85, to:{ y:'bottom', opacity:0 } } }),
+    L('cable_out', 836, 630,  300, 170, 'wire',  { label:'', in:{ delay:.34, dur:1.3, from:{ x:'right', opacity:0 } }, out:{ dur:.9, to:{ x:'right', opacity:0 } } }),
+    L('shadow_i',  360, 780,  580, 110, 'shadow',{ label:'', in:{ delay:.4, dur:1.2, from:{ scale:.4, opacity:0 } }, out:{ dur:.7, to:{ opacity:0 } } }),
+  ],
+
+  battery:[
+    L('rack',      386, 176,  494, 654, 'rack',  { label:'battery rack<br>494×654', phTop:1, in:{ delay:0, dur:1.25, ease:'power3.out', from:{ y:'bottom', opacity:0 } }, out:{ dur:.95, to:{ y:'bottom', opacity:0 } } }),
+    L('bms',       414, 194,  438,  86, 'box',   { label:'BMS head 438×86', glow:.95, in:{ delay:.86, dur:1, ease:'back.out(1.6)', from:{ x:'right', opacity:0 } }, out:{ dur:.8, to:{ x:'right', opacity:0 } } }),
+    L('cell3',     414, 300,  438, 130, 'cell',  { label:'cell 03', in:{ delay:.68, dur:1, ease:'back.out(1.5)', from:{ x:'left', opacity:0 } }, out:{ dur:.8, delay:.14, to:{ x:'left', opacity:0 } } }),
+    L('cell2',     414, 448,  438, 130, 'cell',  { label:'cell 02', in:{ delay:.5, dur:1, ease:'back.out(1.5)', from:{ x:'left', opacity:0 } }, out:{ dur:.8, delay:.08, to:{ x:'left', opacity:0 } } }),
+    L('cell1',     414, 596,  438, 130, 'cell',  { label:'cell 01', in:{ delay:.32, dur:1, ease:'back.out(1.5)', from:{ x:'left', opacity:0 } }, out:{ dur:.8, to:{ x:'left', opacity:0 } } }),
+    L('led_bar',   902, 300,   52, 430, 'cell',  { label:'SOC', glow:1.15, origin:'50% 100%', in:{ delay:1.02, dur:1.1, ease:'power3.out', from:{ scaleY:0, opacity:0 } }, out:{ dur:.7, to:{ scaleY:0, opacity:0 } } }),
+    L('cable_b',   150, 398,  258, 190, 'wire',  { label:'', in:{ delay:.2, dur:1.2, from:{ x:'left', opacity:0 } }, out:{ dur:.9, to:{ x:'left', opacity:0 } } }),
+    L('breaker',   986, 176,  180, 150, 'box',   { label:'breaker<br>180×150', in:{ delay:.42, dur:1.1, from:{ y:'top', opacity:0 } }, out:{ dur:.85, to:{ y:'top', opacity:0 } } }),
+    L('shadow_b',  330, 804,  620, 110, 'shadow',{ label:'', in:{ delay:.4, dur:1.2, from:{ scale:.4, opacity:0 } }, out:{ dur:.7, to:{ opacity:0 } } }),
+  ],
+
+  onreal:[
+    L('moon',     1080, 252,  136, 136, 'round', { label:'moon<br>136', glow:.4, in:{ delay:.1, dur:1.8, ease:'power2.out', from:{ y:'top', opacity:0 } }, out:{ dur:1, to:{ y:'top', opacity:0 } } }),
+    L('street',    -40, 762, 1360, 180, 'box',   { label:'street 1360×180', phTop:1, in:{ delay:0, dur:1.25, ease:'power3.out', from:{ y:'bottom' } }, out:{ dur:.95, to:{ y:'bottom' } } }),
+    L('house',     286, 188,  716, 632, 'house', { label:'house cutaway<br>716×632', phBR:1, in:{ delay:.12, dur:1.4, ease:'power3.out', from:{ y:'bottom', opacity:0 } }, out:{ dur:1, to:{ y:'bottom', opacity:0 } } }),
+    L('roof_pv',   330, 158,  470, 130, 'panel', { label:'rooftop array', rot:-8, origin:'50% 100%',
+                                                   in:{ delay:.34, dur:1.2, ease:'back.out(1.4)', from:{ y:'top', rotation:-40, opacity:0 } }, out:{ dur:.9, to:{ y:'top', rotation:-40, opacity:0 } } }),
+    L('win1',      372, 388,  132, 118, 'box',   { label:'win 01', glow:.60,  in:{ delay:.6,  dur:.7, ease:'power2.out', from:{ scale:.72, opacity:0 } }, out:{ dur:.5, to:{ opacity:0 } } }),
+    L('win2',      556, 388,  132, 118, 'box',   { label:'win 02', glow:.72,  in:{ delay:.72, dur:.7, ease:'power2.out', from:{ scale:.72, opacity:0 } }, out:{ dur:.5, to:{ opacity:0 } } }),
+    L('win3',      740, 388,  132, 118, 'box',   { label:'win 03', glow:.84,  in:{ delay:.84, dur:.7, ease:'power2.out', from:{ scale:.72, opacity:0 } }, out:{ dur:.5, to:{ opacity:0 } } }),
+    L('win4',      556, 566,  132, 118, 'box',   { label:'win 04', glow:.96,  in:{ delay:.96, dur:.7, ease:'power2.out', from:{ scale:.72, opacity:0 } }, out:{ dur:.5, to:{ opacity:0 } } }),
+    L('ac',        820, 690,  140, 104, 'icon',  { label:'A/C', glow:.55, in:{ delay:1.06, dur:.9, ease:'back.out(1.7)', from:{ x:'right', opacity:0 } }, out:{ dur:.7, to:{ x:'right', opacity:0 } } }),
+    L('wifi',      660, 696,   96,  96, 'icon',  { label:'wifi', glow:.55, in:{ delay:1.16, dur:.9, ease:'back.out(1.7)', from:{ x:'left', opacity:0 } }, out:{ dur:.7, to:{ x:'left', opacity:0 } } }),
+    L('fridge',    500, 680,   96, 126, 'icon',  { label:'fridge', glow:.55, in:{ delay:1.26, dur:.9, ease:'back.out(1.7)', from:{ y:'bottom', opacity:0 } }, out:{ dur:.7, to:{ y:'bottom', opacity:0 } } }),
+    L('glow_pool', 220, 742,  860, 180, 'shadow',{ label:'', in:{ delay:.5, dur:1.5, from:{ scale:.4, opacity:0 } }, out:{ dur:.7, to:{ opacity:0 } } }),
+  ],
+};
+
+/* ---- transition choreography (seconds) ------------------------------ */
+const T = {
+  surgeDur : 1.25,        // how long the current takes to cross the stage
+  surgeEase: 'power2.inOut',
+  bgAt     : .18, bgDur:1.05, bgEase:'power2.inOut',   // the wipe follows the surge
+  inAt     : .46,         // new parts assemble behind the current
+  flashAt  : .52,
+  lumDur   : 1.5,
+  lock     : 1.55,        // input lock
+};
+const TEXT = { inDur:.95, inEase:'power2.out', lineDur:1.05, lineEase:'power4.out', lineStep:.07,
+               out:{ y:-90, dur:.5, ease:'power2.in' } };
+
+/* ===================================================================== */
+const W = 1280, H = 900, M = 160;
+const pad = n => String(n).padStart(2, '0');
+const stage   = document.getElementById('stage');
+const copyEl  = document.getElementById('copy');
+const thumbsN = document.getElementById('thumbs');
+const spark   = document.getElementById('spark');
+const flash   = document.getElementById('flash');
+const lumEl   = document.getElementById('lum');
+const kwhEl   = document.getElementById('kwh');
+const barsEl  = document.getElementById('bars');
+const progEl  = document.getElementById('prog');
+const surgePath = document.getElementById('cableSurge');
+
+if (window.MotionPathPlugin) gsap.registerPlugin(MotionPathPlugin);
+
+const q = new URLSearchParams(location.search);
+const slow = parseFloat(q.get('slow'));
+if (slow > 0) gsap.globalTimeline.timeScale(1 / slow);
+const REEL = q.get('reel') === '1';
+const AUTO = REEL || q.get('auto') === '1';
+if (REEL) document.body.classList.add('reel');
+
+let lang = 'en';
+
+/* ---- build every slide ---------------------------------------------- */
+const slides = SLIDES.map((s, i) => {
+  const img = s.images || {};
+
+  const el = document.createElement('div');
+  el.className = 'pw-slide';
+  el.style.setProperty('--tint', s.tint);
+  el.style.setProperty('--glow', s.glow);
+
+  const bg = document.createElement('div');
+  bg.className = 'pw-bg';
+  if (img.bg) bg.style.backgroundImage = `url("${img.bg}")`;
+  else bg.innerHTML = `<span class="pw-bg-label">slide ${pad(i)} · ${s.key} · background</span>`;
+
+  const scene = document.createElement('div');
+  scene.className = 'pw-scene';
+
+  const layers = (LAYOUT[s.key] || []).map(def => {
+    const d = document.createElement('div');
+    d.className = 'pw-layer';
+    d.dataset.layer = def.id;
+    Object.assign(d.style, { left:def.x+'px', top:def.y+'px', width:def.w+'px', height:def.h+'px',
+                             transformOrigin:def.origin || '50% 50%' });
+    d.innerHTML = img[def.id]
+      ? `<img src="${img[def.id]}" alt="">`
+      : `<div class="ph ph--${def.ph}${def.phTop ? ' ph--top' : ''}${def.phBR ? ' ph--br' : ''}">${def.label}</div>`;
+    let gl = null;
+    if (def.glow != null) { gl = document.createElement('i'); gl.className = 'gl'; d.appendChild(gl); }
+    gsap.set(d, rest(def));
+    scene.appendChild(d);
+    return { el:d, gl, L:def };
+  });
+
+  /* spec pins */
+  const pins = (s.specs || []).map(p => {
+    const d = document.createElement('div');
+    d.className = 'pw-pin ' + (p.side === 'l' ? 'l' : 'r');
+    d.style.left = p.x + 'px';
+    d.style.top  = p.y + 'px';
+    d.innerHTML = `<i class="dot"></i><i class="line"></i><span class="txt"><b>${p.v}</b><i>${p.k}</i></span>`;
+    scene.appendChild(d);
+    return d;
+  });
+
+  el.append(bg, scene);
+  stage.appendChild(el);
+
+  /* copy block */
+  const t = document.createElement('div');
+  t.className = 'pw-text';
+  t.innerHTML = `
+    <div class="m pw-kicker"><span data-y="40">${s.kicker}</span></div>
+    <h2 class="m pw-title"><span data-y="120">${s.en}</span></h2>
+    <div class="m pw-sub"><span data-y="80">${s.ar}</span></div>
+    <p class="m pw-desc"><span data-y="70">${s.text}</span></p>
+    <div class="m pw-cta"><a class="pw-btn" href="#" data-y="90">${s.cta}
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h17M14 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2"/></svg></a></div>`;
+  copyEl.appendChild(t);
+
+  const th = document.createElement('button');
+  th.className = 'pw-thumb';
+  th.type = 'button';
+  th.setAttribute('aria-label', `${s.en} — slide ${i + 1}`);
+  th.innerHTML = `<u>${pad(i)}</u><s></s>`;
+  th.addEventListener('click', () => goTo(i));
+  thumbsN.appendChild(th);
+
+  return { el, bg, scene, layers, pins, text:t, lines:[...t.querySelectorAll('[data-y]')], thumb:th, data:s };
+});
+
+/* ---- helpers --------------------------------------------------------- */
+function rest(L) { return { x:0, y:0, rotation:L.rot || 0, scale:1, scaleX:1, scaleY:1, opacity:1 }; }
+
+function edge(v, L, dir) {
+  if (typeof v === 'number') return v;
+  if (dir < 0) v = v === 'top' ? 'bottom' : v === 'bottom' ? 'top'
+                 : v === 'left' ? 'right' : v === 'right' ? 'left' : v;
+  const map = { top:-(L.y + L.h + M), bottom:H - L.y + M, left:-(L.x + L.w + M), right:W - L.x + M };
+  return map[v] !== undefined ? map[v] : 0;
+}
+function resolve(spec, L, dir) {
+  const o = {};
+  for (const k in spec) o[k] = (k === 'x' || k === 'y') ? edge(spec[k], L, dir) : spec[k];
+  return o;
+}
+const inSpec  = L => Object.assign({}, DEF_IN,  L.in  || {}, { from:(L.in  && L.in.from) || DEF_IN.from });
+const outSpec = L => Object.assign({}, DEF_OUT, L.out || {}, { to  :(L.out && L.out.to)  || DEF_OUT.to  });
+
+function layersPrep(s, dir) {
+  s.layers.forEach(({ el, gl, L }) => {
+    const I = inSpec(L);
+    gsap.set(el, Object.assign({}, rest(L), resolve(I.from, L, dir)));
+    if (gl) gsap.set(gl, { opacity:0, scale:.6 });
+  });
+  s.pins.forEach(p => {
+    gsap.set(p, { opacity:0 });
+    gsap.set(p.querySelector('.line'), { scaleX:0 });
+    gsap.set(p.querySelector('.dot'),  { scale:0 });
+    gsap.set(p.querySelector('.txt'),  { opacity:0, x:p.classList.contains('l') ? 18 : -18 });
+  });
+}
+function layersIn(s, dir) {
+  s.layers.forEach(({ el, gl, L }) => {
+    const I = inSpec(L);
+    gsap.fromTo(el, Object.assign({}, rest(L), resolve(I.from, L, dir)),
+      Object.assign({}, rest(L), { duration:I.dur, delay:I.delay || 0, ease:I.ease, overwrite:true }));
+    if (gl) gsap.fromTo(gl, { opacity:0, scale:.6 },
+      { opacity:.9, scale:1, duration:.8, delay:(I.delay || 0) + L.glow, ease:'power2.out', overwrite:true });
+  });
+  s.pins.forEach((p, i) => {
+    const d = .9 + i * .16;
+    gsap.to(p, { opacity:1, duration:.2, delay:d, overwrite:true });
+    gsap.to(p.querySelector('.dot'),  { scale:1, duration:.5, delay:d, ease:'back.out(3)', overwrite:true });
+    gsap.to(p.querySelector('.line'), { scaleX:1, duration:.55, delay:d + .08, ease:'power3.out', overwrite:true });
+    gsap.to(p.querySelector('.txt'),  { opacity:1, x:0, duration:.6, delay:d + .2, ease:'power3.out', overwrite:true });
+  });
+}
+function layersOut(s, dir) {
+  s.layers.forEach(({ el, gl, L }) => {
+    const O = outSpec(L);
+    gsap.to(el, Object.assign({}, resolve(O.to, L, dir),
+      { duration:O.dur, delay:O.delay || 0, ease:O.ease, overwrite:true }));
+    if (gl) gsap.to(gl, { opacity:0, duration:.4, overwrite:true });
+  });
+  s.pins.forEach((p, i) => gsap.to(p, { opacity:0, duration:.35, delay:i * .05, overwrite:true }));
+}
+function textIn(s, dir) {
+  gsap.fromTo(s.text, { autoAlpha:0 }, { autoAlpha:1, duration:TEXT.inDur, ease:TEXT.inEase, overwrite:true });
+  s.lines.forEach((n, i) => gsap.fromTo(n, { y:+n.dataset.y * dir },
+    { y:0, duration:TEXT.lineDur, delay:i * TEXT.lineStep, ease:TEXT.lineEase, overwrite:true }));
+}
+function textOut(s, dir) {
+  gsap.to(s.text, { autoAlpha:0, duration:TEXT.out.dur, ease:TEXT.out.ease, overwrite:true });
+  s.lines.forEach((n, i) => gsap.to(n, { y:TEXT.out.y * dir, duration:TEXT.out.dur, delay:i * .03,
+    ease:TEXT.out.ease, overwrite:true }));
+}
+
+/* ---- the signature move: the current runs down the cable ------------- */
+const cableLen = surgePath.getTotalLength ? surgePath.getTotalLength() : 1800;
+const SEG = 210;
+gsap.set(surgePath, { strokeDasharray:SEG + ' ' + (cableLen + SEG), strokeDashoffset:SEG, opacity:0 });
+
+function surge(dir) {
+  const from = dir > 0 ? SEG : -cableLen;
+  const to   = dir > 0 ? -cableLen : SEG;
+  gsap.fromTo(surgePath, { strokeDashoffset:from, opacity:1 },
+    { strokeDashoffset:to, duration:T.surgeDur, ease:T.surgeEase, overwrite:true,
+      onComplete:() => gsap.to(surgePath, { opacity:0, duration:.25 }) });
+
+  if (window.MotionPathPlugin) {
+    gsap.fromTo(spark, { opacity:0 }, { opacity:1, duration:.18, overwrite:true });
+    gsap.to(spark, {
+      duration:T.surgeDur, ease:T.surgeEase, overwrite:true,
+      motionPath:{ path:'#cableBase', align:'#cableBase', alignOrigin:[.5,.5],
+                   start:dir > 0 ? 0 : 1, end:dir > 0 ? 1 : 0 },
+      onComplete:() => gsap.to(spark, { opacity:0, duration:.25 })
+    });
+  }
+  gsap.to(flash, { opacity:.5, duration:.1, delay:T.flashAt, overwrite:true });
+  gsap.to(flash, { opacity:0,  duration:.65, delay:T.flashAt + .1, ease:'power2.out' });
+}
+
+/* ---- the readouts ---------------------------------------------------- */
+const kwhObj = { v:0 };
+function readouts(s, i) {
+  gsap.to(kwhObj, { v:s.data.kwh, duration:1.5, ease:'power2.out', overwrite:true,
+    onUpdate:() => { kwhEl.textContent = kwhObj.v.toFixed(1); } });
+  const lit = Math.round(s.data.lum * barsEl.children.length);
+  [...barsEl.children].forEach((b, n) => b.classList.toggle('on', n < lit));
+  gsap.to(lumEl, { opacity:1 - s.data.lum, duration:T.lumDur, ease:'power2.inOut', overwrite:true });
+  progEl.style.width = ((i + 1) / SLIDES.length * 100) + '%';
+}
+
+/* ---- navigation ------------------------------------------------------ */
+let cur = 0, busy = false;
+
+function goTo(next, dir) {
+  const n = SLIDES.length;
+  next = (next + n) % n;
+  if (busy || next === cur) return;
+  if (dir === undefined) dir = next > cur ? 1 : -1;
+  busy = true;
+
+  const from = slides[cur], to = slides[next];
+  cur = next;
+  slides.forEach((s, i) => { s.el.style.zIndex = 1; s.thumb.classList.toggle('is-active', i === next); });
+  from.el.style.zIndex = 2;
+  to.el.style.zIndex   = 3;
+  to.el.style.visibility = 'visible';
+
+  layersPrep(to, dir);
+  surge(dir);
+
+  gsap.fromTo(to.bg, { clipPath:dir > 0 ? 'inset(0% 100% 0% 0%)' : 'inset(0% 0% 0% 100%)' },
+    { clipPath:'inset(0% 0% 0% 0%)', duration:T.bgDur, delay:T.bgAt, ease:T.bgEase, overwrite:true });
+
+  layersOut(from, dir);
+  textOut(from, dir);
+  gsap.delayedCall(T.inAt, () => { layersIn(to, dir); textIn(to, dir); });
+  readouts(to, next);
+
+  gsap.delayedCall(T.lock, () => {
+    if (slides[cur] !== from) from.el.style.visibility = 'hidden';
+    busy = false;
+    if (AUTO) queue();
+  });
+}
+const next = () => goTo(cur + 1, 1);
+const prev = () => goTo(cur - 1, -1);
+
+/* ---- language -------------------------------------------------------- */
+document.getElementById('lang').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  lang = b.dataset.lang;
+  document.body.classList.toggle('ar', lang === 'ar');
+  [...e.currentTarget.children].forEach(x => x.classList.toggle('on', x === b));
+  document.getElementById('kwhLabel').textContent = lang === 'ar' ? 'كيلوواط/يوم' : 'kWh / day';
+  slides.forEach(s => {
+    s.text.querySelector('.pw-title span').textContent = lang === 'ar' ? s.data.ar : s.data.en;
+    s.text.querySelector('.pw-sub span').textContent   = lang === 'ar' ? s.data.en : s.data.ar;
+    s.text.querySelector('.pw-desc span').textContent  = lang === 'ar' ? s.data.textAr : s.data.text;
+    const btn = s.text.querySelector('.pw-btn');
+    btn.childNodes[0].nodeValue = (lang === 'ar' ? s.data.ctaAr : s.data.cta) + ' ';
+  });
+});
+
+/* ---- intro ----------------------------------------------------------- */
+slides[0].el.style.visibility = 'visible';
+slides[0].el.style.zIndex = 3;
+slides[0].thumb.classList.add('is-active');
+layersPrep(slides[0], 1);
+layersIn(slides[0], 1);
+textIn(slides[0], 1);
+readouts(slides[0], 0);
+
+/* ---- fit the 1280x900 scene to cover --------------------------------- */
+function fit() {
+  const r = stage.getBoundingClientRect();
+  const s = Math.max(r.width / W, r.height / H);
+  document.querySelectorAll('.pw-stage, .pw-fx').forEach(n => n.style.setProperty('--s', s));
+}
+fit();
+addEventListener('resize', fit);
+
+/* ---- controls -------------------------------------------------------- */
+document.getElementById('next').addEventListener('click', next);
+document.getElementById('prev').addEventListener('click', prev);
+
+const root = document.getElementById('pw');
+root.addEventListener('wheel', e => {
+  e.preventDefault();
+  if (Math.abs(e.deltaY) < 8) return;
+  e.deltaY > 0 ? next() : prev();
+}, { passive:false });
+
+addEventListener('keydown', e => {
+  if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === 'PageDown') { e.preventDefault(); next(); }
+  if (e.key === 'ArrowUp'   || e.key === 'ArrowLeft'  || e.key === 'PageUp')   { e.preventDefault(); prev(); }
+});
+
+let touchY = null;
+root.addEventListener('touchstart', e => { touchY = e.touches[0].clientY; }, { passive:true });
+root.addEventListener('touchend', e => {
+  if (touchY === null) return;
+  const dy = touchY - e.changedTouches[0].clientY;
+  if (Math.abs(dy) > 50) dy > 0 ? next() : prev();
+  touchY = null;
+}, { passive:true });
+
+/* ---- autoplay (reel mode) -------------------------------------------- */
+let hold = null;
+function queue() { if (hold) hold.kill(); hold = gsap.delayedCall(2.0, next); }
+if (AUTO) queue();
+
+window.pw = { next, prev, goTo, slides, SLIDES, LAYOUT };
+</script>
+</body>
+</html>

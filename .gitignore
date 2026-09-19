@@ -1,0 +1,5 @@
+# raw Gemini renders (~25 MB of PNG); img/*.webp is the build output and IS committed
+_src/
+_gen/__pycache__/
+_gen/*.log
+_gen/check*.png
