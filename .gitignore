@@ -3,3 +3,4 @@ _src/
 _gen/__pycache__/
 _gen/*.log
 _gen/check*.png
+_shots/

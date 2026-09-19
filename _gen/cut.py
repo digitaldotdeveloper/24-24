@@ -26,6 +26,30 @@ SLOTS = {'inv_body': ['inv_screen', 'fan'],
 HOST_XY = {'inv_body': (428, 212), 'rack': (386, 176), 'house': (286, 188)}
 # the icons sheet's three cut-outs and the boxes they have to fit
 SHEET_BOX = {'ac': (140, 104), 'wifi': (96, 96), 'fridge': (96, 126)}
+RECESS = (12, 15, 20)          # what a magenta slot is repainted as
+
+
+def fix_slots(name, found, want):
+    """Gemini does not always return the slots as cleanly as the prompt asks."""
+    if name == 'rack' and len(found) > len(want):
+        # It draws more slots than asked for (six, not four). The three cells are the tall
+        # ones; the BMS is the topmost strip. Any leftover slot stays a dark empty bay,
+        # which is what an unpopulated rack looks like anyway.
+        tall = sorted(sorted(found, key=lambda b: b[3] - b[1])[-3:], key=lambda b: b[1])
+        found = [sorted(found, key=lambda b: b[1])[0]] + tall
+    if name == 'house' and len(found) == len(want):
+        # one window often comes back a different shape; make all four the median size,
+        # kept on the centre each one actually landed on
+        ws = sorted(b[2] - b[0] for b in found)
+        hs = sorted(b[3] - b[1] for b in found)
+        mw, mh = ws[len(ws) // 2], hs[len(hs) // 2]
+        cy = [(b[1] + b[3]) // 2 for b in found]
+        for i, y in enumerate(cy):                  # snap a row to its median: a window that
+            row = [v for v in cy if abs(v - y) < mh]   # came back as a tall balcony door sits
+            cy[i] = sorted(row)[len(row) // 2]         # lower, and reads as a mistake
+        found = [[(b[0] + b[2]) // 2 - mw // 2, y - mh // 2,
+                  (b[0] + b[2]) // 2 + mw // 2, y + mh // 2] for b, y in zip(found, cy)]
+    return found
 
 
 def save(img, dst, maxw, q):
@@ -140,7 +164,19 @@ for name in names:
         continue
 
     im = np.asarray(Image.open(src).convert('RGB')).astype(int)
-    alpha, rgb = key_green(im, thin=name in THIN)
+
+    # ---- keys=3: a glow, keyed by luminance off black ---------------------
+    # A halo that fades into a chroma key cannot be separated from it: the blend goes olive
+    # against green and no threshold splits "dim glow" from "background". Rendered on black,
+    # brightness IS the alpha, which is exactly how a glow composites anyway.
+    if j['keys'] == 3:
+        lum = (im[..., 0] * .299 + im[..., 1] * .587 + im[..., 2] * .114) / 255
+        alpha = np.clip(lum * 1.25, 0, 1)
+        # it draws the core mid-grey however hard the prompt asks for white, which reads as a
+        # moon; lift the bright end so the core clips to white and the halo keeps its colour
+        rgb = np.clip(im * (1 + 1.1 * lum[..., None]), 0, 255)
+    else:
+        alpha, rgb = key_green(im, thin=name in THIN)
 
     # ---- the icons sheet: one render, three cut-outs ----------------------
     if fit == 'sheet':
@@ -160,12 +196,18 @@ for name in names:
             print(f'  {part:<10} sheet  {img.size}  {os.path.getsize(f"{IMG}/{part}.webp")//1024} KB')
         continue
 
-    # ---- keys=2: the magenta slots are holes in the host ------------------
+    # ---- keys=2: the magenta slots are recesses in the host ---------------
     mag = None
     if j['keys'] == 2:
         r, g, b = im[..., 0], im[..., 1], im[..., 2]
-        mag = ndimage.binary_opening(np.minimum(r, b) - g > 60, iterations=2)
-        alpha = alpha * ~ndimage.binary_dilation(mag, iterations=1)
+        d = np.minimum(r, b) - g
+        mag = ndimage.binary_opening(d > 40, iterations=2)        # slot rects
+        # Paint every magenta pixel as a dark recess rather than punching it transparent, so a
+        # child that does not quite fill its slot shows shadow and not the page behind. The fill
+        # threshold is much looser than the detection one because the slots come back with a
+        # soft gradient at the edges, and anything left of it reads as a pink smear.
+        # Nothing in these three subjects is legitimately pink, so this cannot eat the object.
+        rgb[ndimage.binary_dilation(d > 10, iterations=2)] = RECESS
 
     ys, xs = np.where(alpha > .02)
     y0, y1, x0, x1 = ys.min(), ys.max() + 1, xs.min(), xs.max() + 1
@@ -189,7 +231,7 @@ for name in names:
 
     # ---- report the slots, in design space --------------------------------
     if mag is not None:
-        found = blobs(mag)
+        found = fix_slots(name, blobs(mag), SLOTS[name])
         want = SLOTS[name]
         print(f'  slots: found {len(found)}, wanted {len(want)}')
         rects = []

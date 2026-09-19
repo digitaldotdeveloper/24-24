@@ -84,8 +84,8 @@
   "w": 226,
   "h": 226,
   "fit": "pad",
-  "keys": 1,
-  "prompt": "The sun as a brilliant white-hot disc in a clear sky seen through a camera lens: a round core of\npure white light with a warm golden corona bleeding outward and a few soft concentric lens-flare\nrings. The disc is centred, and the glow fades completely to nothing well inside the frame so\nthere is a clean border of plain flat background all the way around it.\n\nSquare image.\n\nCinematic 3D product render, photoreal materials, dramatic directional rim light, high contrast. The subject is centred and fills about 90% of the frame.\n\nDraw exactly ONE single subject. Do not draw it twice, no duplicate, no turnaround sheet. Reply with the picture only. Do not describe it, do not comment on it, do not explain what you changed or point out anything about the framing.\n\nEverything outside the subject must be completely flat, uniform, solid #00FF00 pure green: one single colour, no gradient, no shadow, no reflection, no floor, no ground, no background scene, no vignette. Nothing in the subject itself may be green or greenish. No text, no writing, no numbers, no letters, no brand name, no logo, no watermark, no signature."
+  "keys": 3,
+  "prompt": "A simple glowing sun: one perfectly round solid core of blinding pure white light at the centre,\nsurrounded by a smooth warm golden-orange halo that fades evenly outward and dies away completely\nto pure black well inside the frame.\n\nThe background is completely flat, uniform, solid pure BLACK #000000, with nothing in it at all:\nno sky, no clouds, no stars, no scene, no lens, no glass, no metal, no ring, no flare streaks.\nNot a ring and not a donut: the very middle is the single brightest point.\n\nSquare image. No text, no writing, no logo, no watermark."
  },
  {
   "name": "cloud",
@@ -149,7 +149,7 @@
   "h": 716,
   "fit": "cover",
   "keys": 0,
-  "prompt": "A plain interior wall of a service room seen dead straight on and perfectly flat: bare grey\nskim-coat plaster with a faint trowel texture, a couple of old screw holes and a light scuff\nnear one edge. Softly lit from the upper left with warm amber light, the corners a little darker.\n\nWide landscape image.\n\nCinematic 3D product render, photoreal materials, dramatic directional rim light, high contrast. The subject is centred and fills about 90% of the frame.\n\nDraw exactly ONE single subject. Do not draw it twice, no duplicate, no turnaround sheet. Reply with the picture only. Do not describe it, do not comment on it, do not explain what you changed or point out anything about the framing.\n\nEverything outside the subject must be completely flat, uniform, solid #00FF00 pure green: one single colour, no gradient, no shadow, no reflection, no floor, no ground, no background scene, no vignette. Nothing in the subject itself may be green or greenish. No text, no writing, no numbers, no letters, no brand name, no logo, no watermark, no signature."
+  "prompt": "A plain interior wall of a service room, seen dead straight on and perfectly flat, filling the\nwhole frame edge to edge with nothing else in shot: bare grey skim-coat plaster with a faint\ntrowel texture, a couple of old screw holes and a light scuff near one edge. Softly lit from the\nupper left with warm amber light, the corners falling a little darker.\n\nCinematic 3D product render, photoreal materials, dramatic directional rim light, high contrast. The subject is centred and fills about 90% of the frame.\n\nNo text, no writing, no brand name, no logo, no watermark."
  },
  {
   "name": "cable_in",

@@ -287,7 +287,7 @@ const SLIDES = [
     specs:[ {x:492,y:540,side:'r',v:'2 h/day',k:'From the grid'},
             {x:900,y:660,side:'r',v:'$80/mo',k:'Moteur · 5A'},
             {x:700,y:300,side:'r',v:'78 dB',k:'Under the window'} ],
-    images:{ skyline:'img/skyline.webp', tower_l:'img/tower_l.webp', tower_r:'img/tower_r.webp', wires:'img/wires.webp', bulb:'img/bulb.webp', meter:'img/meter.webp', moteur:'img/moteur.webp' } },
+    images:{ bg:'img/bg-blackout.webp', skyline:'img/skyline.webp', tower_l:'img/tower_l.webp', tower_r:'img/tower_r.webp', wires:'img/wires.webp', bulb:'img/bulb.webp', meter:'img/meter.webp', moteur:'img/moteur.webp', candle:'img/candle.webp' } },
 
   { key:'panels', tint:'#16283a', glow:'#7fd0ff', lum:.54, kwh:9.4,
     kicker:'Step 01 — collect',
@@ -298,7 +298,7 @@ const SLIDES = [
     specs:[ {x:700,y:236,side:'r',v:'5.5 kWp',k:'Array size'},
             {x:880,y:470,side:'r',v:'10 panels',k:'550 W mono'},
             {x:620,y:726,side:'r',v:'25 yrs',k:'Output warranty'} ],
-    images:{} },
+    images:{ bg:'img/bg-panels.webp', sun:'img/sun.webp', cloud:'img/cloud.webp', roof:'img/roof.webp', panel_a:'img/panel_a.webp', panel_b:'img/panel_b.webp', bracket:'img/bracket.webp', bird:'img/bird.webp' } },
 
   { key:'inverter', tint:'#0f1620', glow:'#ffc247', lum:.62, kwh:18.2,
     kicker:'Step 02 — decide',
@@ -309,7 +309,7 @@ const SLIDES = [
     specs:[ {x:872,y:250,side:'r',v:'6 kW',k:'Hybrid, 48 V'},
             {x:872,y:452,side:'r',v:'< 10 ms',k:'Transfer time'},
             {x:872,y:700,side:'r',v:'97.6 %',k:'Peak efficiency'} ],
-    images:{} },
+    images:{ bg:'img/bg-inverter.webp', wall:'img/wall.webp', cable_in:'img/cable_in.webp', inv_body:'img/inv_body.webp', inv_cover:'img/inv_cover.webp', inv_screen:'img/inv_screen.webp', fan:'img/fan.webp', bracket_i:'img/bracket_i.webp', cable_out:'img/cable_out.webp' } },
 
   { key:'battery', tint:'#0d1a19', glow:'#3fe3a6', lum:.71, kwh:24.6,
     kicker:'Step 03 — keep',
@@ -320,7 +320,7 @@ const SLIDES = [
     specs:[ {x:898,y:250,side:'r',v:'14.3 kWh',k:'Usable storage'},
             {x:970,y:520,side:'r',v:'6000 cyc',k:'LiFePO₄ cells'},
             {x:898,y:790,side:'r',v:'0 dB',k:'Noise output'} ],
-    images:{} },
+    images:{ bg:'img/bg-battery.webp', rack:'img/rack.webp', bms:'img/bms.webp', cell3:'img/cell.webp', cell2:'img/cell.webp', cell1:'img/cell.webp', led_bar:'img/led_bar.webp', cable_b:'img/cable_b.webp', breaker:'img/breaker.webp' } },
 
   { key:'onreal', tint:'#0b1220', glow:'#ffd27a', lum:.95, kwh:31.0,
     kicker:'And then',
@@ -331,7 +331,7 @@ const SLIDES = [
     specs:[ {x:880,y:250,side:'r',v:'24 / 24',k:'Uptime'},
             {x:1004,y:512,side:'r',v:'0 L',k:'Diesel burned'},
             {x:700,y:842,side:'r',v:'18 mo',k:'Payback'} ],
-    images:{} },
+    images:{ bg:'img/bg-onreal.webp', moon:'img/moon.webp', street:'img/street.webp', house:'img/house.webp', roof_pv:'img/roof_pv.webp', win1:'img/window.webp', win2:'img/window.webp', win3:'img/window.webp', win4:'img/window.webp', ac:'img/ac.webp', wifi:'img/wifi.webp', fridge:'img/fridge.webp' } },
 ];
 
 /* =====================================================================
@@ -362,7 +362,7 @@ const LAYOUT = {
   ],
 
   panels:[
-    L('sun',       978,  54,  226, 226, 'sun',   { label:'sun<br>226×226', glow:.5,
+    L('sun',       922, 136,  226, 226, 'sun',   { label:'sun<br>226×226', glow:.5,
                                                    in:{ delay:.1, dur:1.6, ease:'power2.out', from:{ x:'right', y:-120, rotation:-90, opacity:0 } }, out:{ dur:1.1, to:{ x:'right', rotation:90, opacity:0 } } }),
     L('cloud',     104, 126,  306, 122, 'cloud', { label:'cloud<br>306×122', in:{ delay:0, dur:1.9, ease:'power1.out', from:{ x:'left', opacity:0 } }, out:{ dur:1.3, to:{ x:-420, opacity:0 } } }),
     L('beam1',     372,  72,   46, 300, 'beam',  { label:'', rot:16, in:{ delay:.85, dur:.9, ease:'power2.out', from:{ scaleY:0, opacity:0 } }, out:{ dur:.5, to:{ scaleY:0, opacity:0 } } }),
@@ -382,8 +382,8 @@ const LAYOUT = {
     L('cable_in',  198, 118,  268, 150, 'wire',  { label:'', in:{ delay:.15, dur:1.2, from:{ y:'top', opacity:0 } }, out:{ dur:.8, to:{ y:'top', opacity:0 } } }),
     L('inv_body',  428, 212,  424, 524, 'box',   { label:'inverter body<br>424×524', phTop:1, in:{ delay:.22, dur:1.3, ease:'power3.out', from:{ y:'bottom', opacity:0 } }, out:{ dur:.95, to:{ y:'bottom', opacity:0 } } }),
     L('inv_cover', 428, 212,  424, 524, 'box',   { label:'front cover<br>(explodes off)', in:{ delay:.5, dur:1.4, ease:'power3.out', from:{ x:'left', rotation:-14, opacity:0 } }, out:{ dur:1.1, ease:'power2.inOut', to:{ x:'left', rotation:-18, opacity:0 } } }),
-    L('inv_screen',498, 288,  284, 152, 'screen',{ label:'LCD 284×152', glow:.65, in:{ delay:.72, dur:.9, ease:'power2.out', from:{ scale:.8, opacity:0 } }, out:{ dur:.6, to:{ scale:.86, opacity:0 } } }),
-    L('fan',       556, 544,  168, 168, 'round', { label:'fan<br>168', in:{ delay:.62, dur:1.5, ease:'power3.out', from:{ rotation:-220, scale:.5, opacity:0 } }, out:{ dur:1, to:{ rotation:260, scale:.6, opacity:0 } } }),
+    L('inv_screen',  540, 299,  199, 107, 'screen',{ label:'LCD 284×152', glow:.65, in:{ delay:.72, dur:.9, ease:'power2.out', from:{ scale:.8, opacity:0 } }, out:{ dur:.6, to:{ scale:.86, opacity:0 } } }),
+    L('fan',        553, 459,  175, 175, 'round', { label:'fan<br>168', in:{ delay:.62, dur:1.5, ease:'power3.out', from:{ rotation:-220, scale:.5, opacity:0 } }, out:{ dur:1, to:{ rotation:260, scale:.6, opacity:0 } } }),
     L('bracket_i', 404, 720,  472,  70, 'box',   { label:'wall bracket 472×70', in:{ delay:.1, dur:1.1, from:{ y:'bottom', opacity:0 } }, out:{ dur:.85, to:{ y:'bottom', opacity:0 } } }),
     L('cable_out', 836, 630,  300, 170, 'wire',  { label:'', in:{ delay:.34, dur:1.3, from:{ x:'right', opacity:0 } }, out:{ dur:.9, to:{ x:'right', opacity:0 } } }),
     L('shadow_i',  360, 780,  580, 110, 'shadow',{ label:'', in:{ delay:.4, dur:1.2, from:{ scale:.4, opacity:0 } }, out:{ dur:.7, to:{ opacity:0 } } }),
@@ -391,10 +391,10 @@ const LAYOUT = {
 
   battery:[
     L('rack',      386, 176,  494, 654, 'rack',  { label:'battery rack<br>494×654', phTop:1, in:{ delay:0, dur:1.25, ease:'power3.out', from:{ y:'bottom', opacity:0 } }, out:{ dur:.95, to:{ y:'bottom', opacity:0 } } }),
-    L('bms',       414, 194,  438,  86, 'box',   { label:'BMS head 438×86', glow:.95, in:{ delay:.86, dur:1, ease:'back.out(1.6)', from:{ x:'right', opacity:0 } }, out:{ dur:.8, to:{ x:'right', opacity:0 } } }),
-    L('cell3',     414, 300,  438, 130, 'cell',  { label:'cell 03', in:{ delay:.68, dur:1, ease:'back.out(1.5)', from:{ x:'left', opacity:0 } }, out:{ dur:.8, delay:.14, to:{ x:'left', opacity:0 } } }),
-    L('cell2',     414, 448,  438, 130, 'cell',  { label:'cell 02', in:{ delay:.5, dur:1, ease:'back.out(1.5)', from:{ x:'left', opacity:0 } }, out:{ dur:.8, delay:.08, to:{ x:'left', opacity:0 } } }),
-    L('cell1',     414, 596,  438, 130, 'cell',  { label:'cell 01', in:{ delay:.32, dur:1, ease:'back.out(1.5)', from:{ x:'left', opacity:0 } }, out:{ dur:.8, to:{ x:'left', opacity:0 } } }),
+    L('bms',        487, 215,  291,  57, 'box',   { label:'BMS head 438×86', glow:.95, in:{ delay:.86, dur:1, ease:'back.out(1.6)', from:{ x:'right', opacity:0 } }, out:{ dur:.8, to:{ x:'right', opacity:0 } } }),
+    L('cell3',      487, 359,  291, 131, 'cell',  { label:'cell 03', in:{ delay:.68, dur:1, ease:'back.out(1.5)', from:{ x:'left', opacity:0 } }, out:{ dur:.8, delay:.14, to:{ x:'left', opacity:0 } } }),
+    L('cell2',      487, 503,  291, 131, 'cell',  { label:'cell 02', in:{ delay:.5, dur:1, ease:'back.out(1.5)', from:{ x:'left', opacity:0 } }, out:{ dur:.8, delay:.08, to:{ x:'left', opacity:0 } } }),
+    L('cell1',      487, 647,  291, 131, 'cell',  { label:'cell 01', in:{ delay:.32, dur:1, ease:'back.out(1.5)', from:{ x:'left', opacity:0 } }, out:{ dur:.8, to:{ x:'left', opacity:0 } } }),
     L('led_bar',   902, 300,   52, 430, 'cell',  { label:'SOC', glow:1.15, origin:'50% 100%', in:{ delay:1.02, dur:1.1, ease:'power3.out', from:{ scaleY:0, opacity:0 } }, out:{ dur:.7, to:{ scaleY:0, opacity:0 } } }),
     L('cable_b',   150, 398,  258, 190, 'wire',  { label:'', in:{ delay:.2, dur:1.2, from:{ x:'left', opacity:0 } }, out:{ dur:.9, to:{ x:'left', opacity:0 } } }),
     L('breaker',   986, 176,  180, 150, 'box',   { label:'breaker<br>180×150', in:{ delay:.42, dur:1.1, from:{ y:'top', opacity:0 } }, out:{ dur:.85, to:{ y:'top', opacity:0 } } }),
@@ -407,10 +407,10 @@ const LAYOUT = {
     L('house',     286, 188,  716, 632, 'house', { label:'house cutaway<br>716×632', phBR:1, in:{ delay:.12, dur:1.4, ease:'power3.out', from:{ y:'bottom', opacity:0 } }, out:{ dur:1, to:{ y:'bottom', opacity:0 } } }),
     L('roof_pv',   330, 158,  470, 130, 'panel', { label:'rooftop array', rot:-8, origin:'50% 100%',
                                                    in:{ delay:.34, dur:1.2, ease:'back.out(1.4)', from:{ y:'top', rotation:-40, opacity:0 } }, out:{ dur:.9, to:{ y:'top', rotation:-40, opacity:0 } } }),
-    L('win1',      372, 388,  132, 118, 'box',   { label:'win 01', glow:.60,  in:{ delay:.6,  dur:.7, ease:'power2.out', from:{ scale:.72, opacity:0 } }, out:{ dur:.5, to:{ opacity:0 } } }),
-    L('win2',      556, 388,  132, 118, 'box',   { label:'win 02', glow:.72,  in:{ delay:.72, dur:.7, ease:'power2.out', from:{ scale:.72, opacity:0 } }, out:{ dur:.5, to:{ opacity:0 } } }),
-    L('win3',      740, 388,  132, 118, 'box',   { label:'win 03', glow:.84,  in:{ delay:.84, dur:.7, ease:'power2.out', from:{ scale:.72, opacity:0 } }, out:{ dur:.5, to:{ opacity:0 } } }),
-    L('win4',      556, 566,  132, 118, 'box',   { label:'win 04', glow:.96,  in:{ delay:.96, dur:.7, ease:'power2.out', from:{ scale:.72, opacity:0 } }, out:{ dur:.5, to:{ opacity:0 } } }),
+    L('win1',       450, 397,   89,  89, 'box',   { label:'win 01', glow:.60,  in:{ delay:.6,  dur:.7, ease:'power2.out', from:{ scale:.72, opacity:0 } }, out:{ dur:.5, to:{ opacity:0 } } }),
+    L('win2',       599, 397,   89,  89, 'box',   { label:'win 02', glow:.72,  in:{ delay:.72, dur:.7, ease:'power2.out', from:{ scale:.72, opacity:0 } }, out:{ dur:.5, to:{ opacity:0 } } }),
+    L('win3',       748, 397,   89,  89, 'box',   { label:'win 03', glow:.84,  in:{ delay:.84, dur:.7, ease:'power2.out', from:{ scale:.72, opacity:0 } }, out:{ dur:.5, to:{ opacity:0 } } }),
+    L('win4',       510, 645,   89,  89, 'box',   { label:'win 04', glow:.96,  in:{ delay:.96, dur:.7, ease:'power2.out', from:{ scale:.72, opacity:0 } }, out:{ dur:.5, to:{ opacity:0 } } }),
     L('ac',        820, 690,  140, 104, 'icon',  { label:'A/C', glow:.55, in:{ delay:1.06, dur:.9, ease:'back.out(1.7)', from:{ x:'right', opacity:0 } }, out:{ dur:.7, to:{ x:'right', opacity:0 } } }),
     L('wifi',      660, 696,   96,  96, 'icon',  { label:'wifi', glow:.55, in:{ delay:1.16, dur:.9, ease:'back.out(1.7)', from:{ x:'left', opacity:0 } }, out:{ dur:.7, to:{ x:'left', opacity:0 } } }),
     L('fridge',    500, 680,   96, 126, 'icon',  { label:'fridge', glow:.55, in:{ delay:1.26, dur:.9, ease:'back.out(1.7)', from:{ y:'bottom', opacity:0 } }, out:{ dur:.7, to:{ y:'bottom', opacity:0 } } }),

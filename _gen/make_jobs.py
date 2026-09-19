@@ -32,6 +32,12 @@ def cut(name, w, h, body, shape="", keys=1, fit="pad"):
     return dict(name=name, w=w, h=h, fit=fit, keys=keys,
                 prompt="\n\n".join([body.strip(), shape, STYLE, ONE, KEY]))
 
+def plate(name, w, h, body):
+    """a backdrop plate: fills its box edge to edge, never keyed, so no green clause"""
+    return dict(name=name, w=w, h=h, fit="cover", keys=0,
+                prompt="\n\n".join([body.strip(), STYLE,
+                                    "No text, no writing, no brand name, no logo, no watermark."]))
+
 def bg(name, body):
     return dict(name=name, w=1600, h=900, fit="bg", keys=0,
                 prompt=body.strip() + "\n\nWide cinematic 16:9 photograph, film grain, "
@@ -112,12 +118,17 @@ deep blue sky with a few thin white clouds, hazy pale buildings receding into th
 sea a bright band on the horizon. Strong hard overhead sunlight, crisp shadows, slight heat haze.
 """),
 
-cut("sun", 226, 226, """
-The sun as a brilliant white-hot disc in a clear sky seen through a camera lens: a round core of
-pure white light with a warm golden corona bleeding outward and a few soft concentric lens-flare
-rings. The disc is centred, and the glow fades completely to nothing well inside the frame so
-there is a clean border of plain flat background all the way around it.
-"""),
+dict(name="sun", w=226, h=226, fit="pad", keys=3, prompt="""
+A simple glowing sun: one perfectly round solid core of blinding pure white light at the centre,
+surrounded by a smooth warm golden-orange halo that fades evenly outward and dies away completely
+to pure black well inside the frame.
+
+The background is completely flat, uniform, solid pure BLACK #000000, with nothing in it at all:
+no sky, no clouds, no stars, no scene, no lens, no glass, no metal, no ring, no flare streaks.
+Not a ring and not a donut: the very middle is the single brightest point.
+
+Square image. No text, no writing, no logo, no watermark.
+""".strip()),
 
 cut("cloud", 306, 122, """
 A single small white cumulus cloud seen from the side, sunlit from the upper right, with bright
@@ -166,11 +177,12 @@ walls, a scuffed concrete floor, a distribution board and a coil of conduit on t
 dust in the air. Warm amber pool of light falling from the upper left, the corners deep in shadow.
 """),
 
-cut("wall", 940, 716, """
-A plain interior wall of a service room seen dead straight on and perfectly flat: bare grey
-skim-coat plaster with a faint trowel texture, a couple of old screw holes and a light scuff
-near one edge. Softly lit from the upper left with warm amber light, the corners a little darker.
-""", keys=0, fit="cover"),
+plate("wall", 940, 716, """
+A plain interior wall of a service room, seen dead straight on and perfectly flat, filling the
+whole frame edge to edge with nothing else in shot: bare grey skim-coat plaster with a faint
+trowel texture, a couple of old screw holes and a light scuff near one edge. Softly lit from the
+upper left with warm amber light, the corners falling a little darker.
+"""),
 
 cut("cable_in", 268, 150, """
 A thick black armoured electrical cable coming down from the top left and bending away to the

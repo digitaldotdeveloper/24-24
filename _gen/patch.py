@@ -31,10 +31,20 @@ SLIDE_IMAGES = [
 
 # ---- 1. move the children onto the slots their host actually rendered -----
 slots = json.load(open('slots.json')) if os.path.exists('slots.json') else {}
+meta = json.load(open('layers.json')) if os.path.exists('layers.json') else {}
+# a slot is whatever shape the render gave it; the part that goes in has its own aspect.
+# Keep the slot's width and take the height from the part, or object-fit:contain letterboxes
+# it and the part floats in the middle of its own bay.
+SLOT_ANCHOR = {'bms': 'top'}          # the BMS strip is much flatter than its slot
 moved = {}
 for host, d in slots.items():
-    for part, rect in zip(d['want'], d['rects']):
-        moved[part] = rect
+    for part, (x, y, w, h) in zip(d['want'], d['rects']):
+        m = meta.get(part)
+        if m:
+            nh = round(w * m['h'] / m['w'])
+            y = y if SLOT_ANCHOR.get(part) == 'top' else y + (h - nh) // 2
+            h = nh
+        moved[part] = [x, y, w, h]
 
 def move(m):
     part = m.group(1)
