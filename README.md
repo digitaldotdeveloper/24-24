@@ -37,6 +37,20 @@ Layers that are pure light — `smoke`, `shadow*`, `beam1..3`, `glow_pool` — a
 gradients on purpose. They are atmosphere, not objects, and a render of them keys badly and
 looks worse.
 
+Two things a generator cannot do, so the pipeline does them instead:
+
+- **The inverter's readout is drawn, not generated.** Gemini renders convincing-looking glyphs
+  that are not actually digits, and no wording fixes it. `draw_lcd()` in `cut.py` keeps the
+  render's bar graph and backlit glass, wipes the old glyphs and paints a real seven-segment
+  `6.0` over them. The wipe threshold is far lower than the one used to find the digits: the
+  glow around the old glyphs sits well below it and, left behind, reads as extra lit segments.
+- **The sun is not dimmed.** Each slide has a black `.pw-lum` overlay set from `SLIDES[i].lum`,
+  which turned a pure white sun into a grey disc. Layers flagged `top:1` in `LAYOUT` are built
+  into `.pw-above`, a container *outside* `.pw-slide`: the transition gives the active slide a
+  `z-index`, making it a stacking context, and nothing inside one can be raised above something
+  outside it. If you flag another layer, it inherits that container's visibility from the slide
+  automatically.
+
 ### Rebuilding the art
 
 ```bash

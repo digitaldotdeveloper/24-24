@@ -37,6 +37,11 @@
   .pw-scene,.pw-fx{position:absolute;left:50%;top:50%;width:1280px;height:900px;transform:translate(-50%,-50%) scale(var(--s))}
   /* the current sits above the dimmer — it is the brightest thing on screen */
   .pw-fx{pointer-events:none;z-index:13}
+  /* Layers flagged top:1 ride above the dimmer: a light source should not be dimmed by how
+     lit the scene it is lighting happens to be. This has to live OUTSIDE .pw-slide — the
+     transition gives the active slide a z-index, which makes it a stacking context, and
+     nothing inside one can be raised above something outside it. */
+  .pw-above{position:absolute;inset:0;z-index:11;pointer-events:none;visibility:hidden}
   .pw-layer{position:absolute;will-change:transform,opacity}
   .pw-layer img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;pointer-events:none;user-select:none}
   .pw-layer .gl{position:absolute;inset:-18%;border-radius:50%;opacity:0;pointer-events:none;
@@ -219,6 +224,7 @@
   </div>
 
   <div class="pw-lum" id="lum"></div>
+  <div class="pw-above" id="above"></div>
   <div class="pw-flash" id="flash"></div>
   <div class="pw-scrim"></div>
 
@@ -362,7 +368,7 @@ const LAYOUT = {
   ],
 
   panels:[
-    L('sun',       922, 136,  226, 226, 'sun',   { label:'sun<br>226×226', glow:.5,
+    L('sun',       922, 136,  226, 226, 'sun',   { label:'sun<br>226×226', glow:.5, top:1,
                                                    in:{ delay:.1, dur:1.6, ease:'power2.out', from:{ x:'right', y:-120, rotation:-90, opacity:0 } }, out:{ dur:1.1, to:{ x:'right', rotation:90, opacity:0 } } }),
     L('cloud',     104, 126,  306, 122, 'cloud', { label:'cloud<br>306×122', in:{ delay:0, dur:1.9, ease:'power1.out', from:{ x:'left', opacity:0 } }, out:{ dur:1.3, to:{ x:-420, opacity:0 } } }),
     L('beam1',     372,  72,   46, 300, 'beam',  { label:'', rot:16, in:{ delay:.85, dur:.9, ease:'power2.out', from:{ scaleY:0, opacity:0 } }, out:{ dur:.5, to:{ scaleY:0, opacity:0 } } }),
@@ -440,6 +446,7 @@ const thumbsN = document.getElementById('thumbs');
 const spark   = document.getElementById('spark');
 const flash   = document.getElementById('flash');
 const lumEl   = document.getElementById('lum');
+const aboveEl = document.getElementById('above');
 const kwhEl   = document.getElementById('kwh');
 const barsEl  = document.getElementById('bars');
 const progEl  = document.getElementById('prog');
@@ -472,6 +479,9 @@ const slides = SLIDES.map((s, i) => {
 
   const scene = document.createElement('div');
   scene.className = 'pw-scene';
+  const sceneTop = document.createElement('div');
+  sceneTop.className = 'pw-scene';
+  aboveEl.appendChild(sceneTop);
 
   const layers = (LAYOUT[s.key] || []).map(def => {
     const d = document.createElement('div');
@@ -485,7 +495,7 @@ const slides = SLIDES.map((s, i) => {
     let gl = null;
     if (def.glow != null) { gl = document.createElement('i'); gl.className = 'gl'; d.appendChild(gl); }
     gsap.set(d, rest(def));
-    scene.appendChild(d);
+    (def.top ? sceneTop : scene).appendChild(d);
     return { el:d, gl, L:def };
   });
 
@@ -523,7 +533,7 @@ const slides = SLIDES.map((s, i) => {
   th.addEventListener('click', () => goTo(i));
   thumbsN.appendChild(th);
 
-  return { el, bg, scene, layers, pins, text:t, lines:[...t.querySelectorAll('[data-y]')], thumb:th, data:s };
+  return { el, bg, scene, top:sceneTop, layers, pins, text:t, lines:[...t.querySelectorAll('[data-y]')], thumb:th, data:s };
 });
 
 /* ---- helpers --------------------------------------------------------- */
@@ -645,6 +655,7 @@ function goTo(next, dir) {
   from.el.style.zIndex = 2;
   to.el.style.zIndex   = 3;
   to.el.style.visibility = 'visible';
+  to.top.style.visibility = 'visible';
 
   layersPrep(to, dir);
   surge(dir);
@@ -658,7 +669,7 @@ function goTo(next, dir) {
   readouts(to, next);
 
   gsap.delayedCall(T.lock, () => {
-    if (slides[cur] !== from) from.el.style.visibility = 'hidden';
+    if (slides[cur] !== from) { from.el.style.visibility = 'hidden'; from.top.style.visibility = 'hidden'; }
     busy = false;
     if (AUTO) queue();
   });
@@ -684,6 +695,7 @@ document.getElementById('lang').addEventListener('click', e => {
 
 /* ---- intro ----------------------------------------------------------- */
 slides[0].el.style.visibility = 'visible';
+slides[0].top.style.visibility = 'visible';
 slides[0].el.style.zIndex = 3;
 slides[0].thumb.classList.add('is-active');
 layersPrep(slides[0], 1);
@@ -695,7 +707,7 @@ readouts(slides[0], 0);
 function fit() {
   const r = stage.getBoundingClientRect();
   const s = Math.max(r.width / W, r.height / H);
-  document.querySelectorAll('.pw-stage, .pw-fx').forEach(n => n.style.setProperty('--s', s));
+  document.querySelectorAll('.pw-stage, .pw-fx, .pw-above').forEach(n => n.style.setProperty('--s', s));
 }
 fit();
 addEventListener('resize', fit);

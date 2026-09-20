@@ -52,6 +52,96 @@ def fix_slots(name, found, want):
     return found
 
 
+SEG = {'0': 'ABCDEF', '1': 'BC', '2': 'ABGED', '3': 'ABGCD', '4': 'FGBC',
+       '5': 'AFGCD', '6': 'AFGEDC', '7': 'ABC', '8': 'ABCDEFG', '9': 'ABCDFG'}
+LIT, DIM, BLOOM = (254, 232, 182), (58, 48, 28), (255, 168, 60)
+
+
+def _seg_polys(x, y, w, h, t, g=None):
+    """the seven chamfered bars of a seven-segment digit, keyed A-G"""
+    g = round(t * 0.55) if g is None else g
+    m, hw = y + h / 2, t / 2
+    def hor(cy):
+        return [(x + g, cy), (x + hw + g, cy - hw), (x + w - hw - g, cy - hw),
+                (x + w - g, cy), (x + w - hw - g, cy + hw), (x + hw + g, cy + hw)]
+    def ver(cx, y0, y1):
+        return [(cx, y0 + g), (cx + hw, y0 + hw + g), (cx + hw, y1 - hw - g),
+                (cx, y1 - g), (cx - hw, y1 - hw - g), (cx - hw, y0 + hw + g)]
+    return {'A': hor(y + hw), 'D': hor(y + h - hw), 'G': hor(m),
+            'F': ver(x + hw, y, m), 'B': ver(x + w - hw, y, m),
+            'E': ver(x + hw, m, y + h), 'C': ver(x + w - hw, m, y + h)}
+
+
+def draw_lcd(img, text='6.0'):
+    """Repaint the inverter's digits. Gemini renders plausible-looking glyphs that are not
+    actually numbers, and no prompt fixes that, so the readout is drawn instead. The bar
+    graph and the backlit glass it came back with are kept."""
+    from PIL import ImageDraw, ImageFilter
+    a = np.asarray(img.convert('RGBA')).astype(int)
+    lit = (a[..., :3].mean(2) > 150) & (a[..., 3] > 200)
+    col = lit.sum(0)
+    runs, s = [], None                                   # lit column runs: bars, then digits
+    for x, v in enumerate(np.append(col, 0)):
+        if v and s is None: s = x
+        elif not v and s is not None: runs.append((s, x)); s = None
+    runs = [r for r in runs if r[1] - r[0] > 8]
+    if len(runs) < 2:
+        return img
+    x0, x1 = runs[1][0], runs[-1][1]                     # everything right of the bar graph
+    ys = np.where(lit[:, x0:x1].any(1))[0]
+    y0, y1 = int(ys.min()), int(ys.max())
+    h = y1 - y0
+    t = max(5, round(h * 0.105))
+
+    # Wipe only the pixels the old glyphs actually lit, refilled with the dark glass around
+    # them. A plain rectangle leaves a visible seam: the glass is not one flat colour.
+    # The wipe threshold has to be far lower than the detection one. `lit` finds only the
+    # cores of the old glyphs; their glow and antialiased edges sit around 60-150 and, left
+    # behind, read as extra lit segments -- which is what made the 6 look like an 8.
+    reg = (slice(max(0, y0 - 2 * t), y1 + 2 * t), slice(max(0, x0 - 2 * t), x1 + 2 * t))
+    patch = a[reg].copy()
+    old = ndimage.binary_dilation(patch[..., :3].mean(2) > 55, iterations=max(3, t // 2))
+    dark = patch[..., :3][~old]
+    patch[..., :3][old] = np.median(dark, axis=0) if len(dark) else (26, 23, 14)
+    a[reg] = patch
+    base = Image.fromarray(a.clip(0, 255).astype('uint8'), 'RGBA')
+    d = ImageDraw.Draw(base)
+
+    glyphs = [c for c in text if c != '.']
+    dots = text.count('.')
+    gap = round(t * 0.8)
+    dw = (x1 - x0 - gap * (len(glyphs) - 1) - dots * (t + gap)) / len(glyphs)
+    # lit and unlit go on separate layers: the bloom is built from the LIT one alone, or the
+    # dark segments glow too and every digit reads as an 8
+    lay = Image.new('RGBA', base.size, (0, 0, 0, 0))
+    off = Image.new('RGBA', base.size, (0, 0, 0, 0))
+    dl, do = ImageDraw.Draw(lay), ImageDraw.Draw(off)
+    cx = x0
+    for c in text:
+        if c == '.':
+            dl.ellipse([cx, y1 - t, cx + t, y1], fill=LIT + (255,))
+            cx += t + gap
+            continue
+        for k, pts in _seg_polys(cx, y0, dw, h, t).items():
+            if k in SEG.get(c, ''):
+                dl.polygon(pts, fill=LIT + (255,))
+            else:
+                do.polygon(pts, fill=DIM + (70,))
+        cx += dw + gap
+
+    # wide and faint, so it reads as glow rather than thickening the stroke
+    bloom = lay.filter(ImageFilter.GaussianBlur(t * 0.85))
+    tint = Image.new('RGBA', base.size, BLOOM + (0,))
+    tint.putalpha(bloom.split()[3].point(lambda v: int(v * 0.22)))
+    base.alpha_composite(off)
+    base.alpha_composite(tint)
+    base.alpha_composite(lay)
+    return base
+
+
+POST = {'inv_screen': draw_lcd}
+
+
 def save(img, dst, maxw, q):
     if img.width > maxw:
         img = img.resize((maxw, round(img.height * maxw / img.width)), Image.LANCZOS)
@@ -226,6 +316,9 @@ for name in names:
         cut, ox, oy, W, H = pad_to(cut, bw / bh, ANCHOR.get(name, 'center'))
 
     img = save(Image.fromarray(cut, 'RGBA'), f'{IMG}/{name}.webp', min(1100, max(320, bw * 2)), Q)
+    if name in POST:                      # drawn at final size: no resample blur on the segments
+        img = POST[name](img)
+        img.save(f'{IMG}/{name}.webp', 'WEBP', quality=Q, method=6, alpha_quality=AQ)
     meta[name] = {'w': img.width, 'h': img.height}
     print(f'{name:<12} {fit:<6} {img.size}  {os.path.getsize(f"{IMG}/{name}.webp")//1024} KB')
 
