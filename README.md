@@ -27,8 +27,11 @@ WebP with alpha into `img/`. The whole set is about 40 renders and a little over
 Each cut-out was asked for on a flat **`#00FF00` green** field, which becomes the alpha channel.
 Three layers carry a second key: the parts of them that are *holes* — the four windows in the
 house, the LCD and fan openings in the inverter, the four slots in the battery rack — were asked
-for as flat **`#FF00FF` magenta**. That gives two things at once: the hole is punched out of the
-host's alpha, and the magenta blob's bounding box says exactly where the child layer belongs.
+for as flat **`#FF00FF` magenta**. That gives two things at once: the magenta is repainted as a
+dark recess — not punched transparent, so a child that does not quite fill its slot shows shadow
+rather than the page behind — and its bounding box says exactly where the child layer belongs.
+Two thresholds do it: a tight one finds the slot rects, a much looser one does the repainting,
+because the slots come back with soft gradient edges that otherwise survive as a pink smear.
 `cut.py` reports those rects in design-space coordinates and `patch.py` moves `win1..4`,
 `inv_screen`, `fan`, `bms` and `cell1..3` onto them, so the children land on the openings their
 host actually came back with instead of where the layout guessed they would be.
